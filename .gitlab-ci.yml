@@ -16,7 +16,6 @@ maven-build:
   stage: build
   script: 
    - mvn package -B --file root/pom.xml
-   - ls root/server/target
   artifacts:
     paths:
       - root/server/target/*.jar
@@ -25,9 +24,9 @@ docker-build:
   stage: package
   script:
    - ls root/server/target
-#  - docker build -t registry.gitlab.com/toofun-group/kaseb-server .
-#  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-#  - docker push registry.gitlab.com/toofun-group/kaseb-server
+   - docker build -t registry.gitlab.com/toofun-group/kaseb-server .
+   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+   - docker push registry.gitlab.com/toofun-group/kaseb-server
 
 #k8s-deploy:
 #  image: google/cloud-sdk
