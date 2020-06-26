@@ -16,15 +16,15 @@ maven-build:
   stage: build
   script: 
    - mvn package -B --file root/pom.xml
-   - ls target
+   - ls root/server/target
   artifacts:
     paths:
-      - target/*.jar
+      - root/server/target/*.jar
 
 docker-build:
   stage: package
   script:
-   - ls target
+   - ls root/server/target
 #  - docker build -t registry.gitlab.com/toofun-group/kaseb-server .
 #  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
 #  - docker push registry.gitlab.com/toofun-group/kaseb-server
