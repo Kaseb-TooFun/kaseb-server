@@ -1,5 +1,4 @@
-Kaseb Server based on Spring Boot
-
+# Kaseb Server
 
 # How to run
 
