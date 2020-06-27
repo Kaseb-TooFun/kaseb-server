@@ -60,7 +60,8 @@ arvan-deploy:
   image: mormoroth/arvancli
   stage: deploy
   script:
-  - echo -e "$ARVAN_CLI_TOKEN\n" | arvan login'
+  - echo -e "$ARVAN_CLI_TOKEN\n"
+  - echo -e "$ARVAN_CLI_TOKEN\n" | arvan login
   - arvan paas status
 #  - gcloud auth activate-service-account --key-file key.json
 #  - gcloud config set compute/zone europe-west1-c
