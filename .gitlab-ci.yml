@@ -60,12 +60,8 @@ arvan-deploy:
 #  image: mormoroth/arvancli
   stage: deploy
   script:
-   - wget https://napi.arvancloud.com:443 || true
-   - wget arvancloud.com || true
-   - wget iran.ir || true
-   - wget google.com || true
-#  - echo "$ARVAN_CLI_TOKEN\n" | arvan login
-#  - arvan paas status
+  - echo "$ARVAN_CLI_TOKEN\n" | arvan login
+  - arvan paas status
 #  - gcloud auth activate-service-account --key-file key.json
 #  - gcloud config set compute/zone europe-west1-c
 #  - gcloud config set project actuator-sample
