@@ -57,11 +57,15 @@ docker-build:
     - if: '$CI_PIPELINE_SOURCE == "chat"'
 
 arvan-deploy:
-  image: mormoroth/arvancli
+#  image: mormoroth/arvancli
   stage: deploy
   script:
-  - echo "$ARVAN_CLI_TOKEN\n" | arvan login
-  - arvan paas status
+   - wget napi.arvancloud.com
+   - wget arvancloud.com
+   - wget iran.ir
+   - wget google.com
+#  - echo "$ARVAN_CLI_TOKEN\n" | arvan login
+#  - arvan paas status
 #  - gcloud auth activate-service-account --key-file key.json
 #  - gcloud config set compute/zone europe-west1-c
 #  - gcloud config set project actuator-sample
