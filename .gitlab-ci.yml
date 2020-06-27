@@ -12,15 +12,30 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
 
 stages:
+  - test
   - build
   - package
   - deploy
+
+maven-test:
+  stage: test
+  script:
+    - mvn verify --file root/pom.xml
+  artifacts:
+    reports:
+      junit:
+        - root/server/target/surefire-reports/TEST-*.xml
+        - root/server/target/failsafe-reports/TEST-*.xml
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "chat"'
 
 maven-build:
   image: maven:3-jdk-11
   stage: build
   script: 
-   - mvn package -B --file root/pom.xml
+   - mvn package -B -Dmaven.test.skip=true --file root/pom.xml
   artifacts:
     paths:
       - root/server/target/*.jar
