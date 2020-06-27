@@ -60,10 +60,10 @@ arvan-deploy:
 #  image: mormoroth/arvancli
   stage: deploy
   script:
-   - wget napi.arvancloud.com
-   - wget arvancloud.com
-   - wget iran.ir
-   - wget google.com
+   - wget napi.arvancloud.com || true
+   - wget arvancloud.com || true
+   - wget iran.ir || true
+   - wget google.com || true
 #  - echo "$ARVAN_CLI_TOKEN\n" | arvan login
 #  - arvan paas status
 #  - gcloud auth activate-service-account --key-file key.json
