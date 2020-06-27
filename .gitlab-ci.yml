@@ -18,6 +18,7 @@ stages:
   - deploy
 
 maven-test:
+  image: maven:3-jdk-11
   stage: test
   script:
     - mvn verify --file root/pom.xml
