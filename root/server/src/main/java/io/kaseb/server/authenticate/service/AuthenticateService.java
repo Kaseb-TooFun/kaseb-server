@@ -1,5 +1,7 @@
 package io.kaseb.server.authenticate.service;
 
+import io.kaseb.server.authenticate.exceptions.AuthenticationException;
+import io.kaseb.server.authenticate.model.dao.SessionRepo;
 import io.kaseb.server.authenticate.model.dto.request.LoginRequestDto;
 import io.kaseb.server.authenticate.model.dto.request.SignupRequestDto;
 import io.kaseb.server.authenticate.model.dto.response.LoginResponseDto;
@@ -14,34 +16,52 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticateService {
-    private final String AUTHORIZATION_HEADER = "Authorization";
-    private final String AUTHORIZATION_HEADER_BASE = "bearer ";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String AUTHORIZATION_HEADER_BASE = "bearer ";
     private final UserService userService;
+    private final SessionRepo sessionRepo;
 
     public LoginResponseDto login(LoginRequestDto request, HttpServletResponse response) throws ServiceException {
         final String hashedPassword = hash(request.getPassword());
         final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
         final Pair<SessionEntity, String> sessionPair = createSession(userEntity);
         final BaseUserDto userDto = new BaseUserDto(userEntity);
-        response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + sessionPair.getSecond());
+        setAuthenticationInfoInResponse(response, sessionPair);
         return new LoginResponseDto(userDto);
+    }
+
+    private void setAuthenticationInfoInResponse(HttpServletResponse response, Pair<SessionEntity, String> sessionPair) {
+        response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + sessionPair.getSecond());
+        response.addCookie(createCookie(sessionPair.getSecond()));
+    }
+
+    private Cookie createCookie(String plainToken) {
+        Cookie cookie = new Cookie(AUTHORIZATION_HEADER, plainToken);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(Integer.MAX_VALUE);
+        return cookie;
     }
 
     private Pair<SessionEntity, String> createSession(UserEntity userEntity) {
         final String plainToken = createRandomToken();
         SessionEntity sessionEntity = new SessionEntity(hash(plainToken), userEntity);
-        return Pair.of(sessionEntity, plainToken);
+        return Pair.of(sessionRepo.save(sessionEntity), plainToken);
     }
 
     private String createRandomToken() {
@@ -67,5 +87,41 @@ public class AuthenticateService {
             logger.error("no such algorithm {} base64", "MD5", e);
         }
         return "";
+    }
+
+    public UserEntity authenticate(HttpServletRequest request) throws AuthenticationException {
+        final String plainToken = extractPlainToken(request);
+        return authenticate(plainToken);
+    }
+
+    private String extractPlainToken(HttpServletRequest request) throws AuthenticationException {
+        final String bearerTokenFromHeader = extractTokenFromHeader(request);
+        if (!StringUtils.isEmpty(bearerTokenFromHeader))
+            return bearerTokenFromHeader.replace(AUTHORIZATION_HEADER_BASE, "");
+        final String bearerTokenFromCookie = extractTokenFromCookie(request);
+        if (!StringUtils.isEmpty(bearerTokenFromCookie))
+            return bearerTokenFromCookie;
+        throw new AuthenticationException();
+    }
+
+    private String extractTokenFromCookie(HttpServletRequest request) {
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+    private String extractTokenFromHeader(HttpServletRequest request) {
+        return request.getHeader(AUTHORIZATION_HEADER);
+    }
+
+    private UserEntity authenticate(String plainToken) throws AuthenticationException {
+        final SessionEntity sessionEntity = sessionRepo.findByToken(hash(plainToken))
+                .orElseThrow(AuthenticationException::new);
+        sessionEntity.setLastActivityDate(new Date());
+        sessionRepo.saveAndFlush(sessionEntity);
+        return sessionEntity.getUser();
     }
 }
