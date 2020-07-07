@@ -4,6 +4,7 @@ import io.kaseb.server.authenticate.model.dto.request.LoginRequestDto;
 import io.kaseb.server.authenticate.model.dto.request.SignupRequestDto;
 import io.kaseb.server.authenticate.model.dto.response.LoginResponseDto;
 import io.kaseb.server.authenticate.model.dto.response.SignupResponseDto;
+import io.kaseb.server.exceptions.ServiceException;
 import io.kaseb.server.user.model.dto.BaseUserDto;
 import io.kaseb.server.user.model.entities.UserEntity;
 import io.kaseb.server.user.service.UserService;
@@ -22,14 +23,14 @@ import java.security.NoSuchAlgorithmException;
 public class AuthenticateService {
     private final UserService userService;
 
-    public LoginResponseDto login(LoginRequestDto request) {
+    public LoginResponseDto login(LoginRequestDto request) throws ServiceException {
         final String hashedPassword = hash(request.getPassword());
         final UserEntity user = userService.login(request.getUsername(), hashedPassword);
         final BaseUserDto userDto = new BaseUserDto(user);
         return new LoginResponseDto(userDto);
     }
 
-    public SignupResponseDto signup(SignupRequestDto request) {
+    public SignupResponseDto signup(SignupRequestDto request) throws ServiceException {
         final String hashedPassword = hash(request.getPassword());
         final UserEntity user = userService.signup(request.getUsername(), hashedPassword);
         final BaseUserDto userDto = new BaseUserDto(user);
