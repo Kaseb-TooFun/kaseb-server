@@ -34,7 +34,7 @@ public class UserService {
         logger.info("trying to login with username : {}", username);
         Optional<UserEntity> optionalUserEntity = userRepo.findByUsername(username);
         UserEntity userEntity = optionalUserEntity.orElseThrow(UserNotFoundException::new);
-        if (Objects.equals(userEntity.getHashedPassword(), hashedPassword))
+        if (!Objects.equals(userEntity.getHashedPassword(), hashedPassword))
             throw new IncorrectPasswordException();
         return userEntity;
     }

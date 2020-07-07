@@ -11,13 +11,13 @@ import java.util.UUID;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 @Entity
-@Table(name = "users")
+@Table(name = "sessions")
 @Getter
 @NoArgsConstructor
 public class SessionEntity {
     @Id
     @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
+    private final String id = UUID.randomUUID().toString();
     @Column(name = "token")
     private String token;
     @ManyToOne

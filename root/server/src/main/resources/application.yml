@@ -2,6 +2,10 @@ server:
   port: 1212
 spring:
   jpa:
-    database: H2
+    database: POSTGRESQL
     hibernate:
       ddl-auto: update
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/kaseb"
+    username: "kaseb"
+    password: "kaseb"

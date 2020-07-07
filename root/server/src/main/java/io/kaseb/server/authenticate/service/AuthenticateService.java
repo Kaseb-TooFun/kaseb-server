@@ -47,7 +47,7 @@ public class AuthenticateService {
     private String createRandomToken() {
         final byte[] randomBytes = new byte[100];
         new Random(System.currentTimeMillis()).nextBytes(randomBytes);
-        return new String(randomBytes, StandardCharsets.UTF_8);
+        return Base64Utils.encodeToString(randomBytes);
     }
 
     public SignupResponseDto signup(SignupRequestDto request) throws ServiceException {
@@ -66,6 +66,6 @@ public class AuthenticateService {
         } catch (NoSuchAlgorithmException e) {
             logger.error("no such algorithm {} base64", "MD5", e);
         }
-        return null;
+        return "";
     }
 }

@@ -7,9 +7,10 @@ import lombok.Getter;
  */
 @Getter
 public enum ServiceExceptions {
-    DUPLICATE_USERNAME(200, "duplicate_username"),
-    USER_NOT_FOUND(201, "user_not_found"),
-    INCORRECT_PASSWORD(202, "incorrect_password");
+    INTERNAL(1000, "internal"),
+    DUPLICATE_USERNAME(1001, "duplicate_username"),
+    USER_NOT_FOUND(1002, "user_not_found"),
+    INCORRECT_PASSWORD(1003, "incorrect_password");
 
 
     private ServiceExceptions(Integer errorCode, String errorMessage) {

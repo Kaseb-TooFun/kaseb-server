@@ -16,7 +16,7 @@ import java.util.UUID;
 public class UserEntity {
     @Id
     @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
+    private final String id = UUID.randomUUID().toString();
     @Column(name = "username")
     private String username;
     @Column(name = "hashed_password")
