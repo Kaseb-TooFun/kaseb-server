@@ -12,11 +12,11 @@ import java.util.Objects;
 @ToString
 @Getter
 public class VerifyResponseDto {
-    private final LocalDate date;
+    private final String date;
     private final boolean up;
 
     public VerifyResponseDto(boolean up) {
-        this.date = LocalDate.now();
+        this.date = LocalDate.now().toString();
         this.up = up;
     }
 
