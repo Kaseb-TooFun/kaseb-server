@@ -1,0 +1,38 @@
+version: "3"
+
+networks: 
+  kaseb-network:
+
+volumes:
+  kaseb-postgres-data:
+
+services:
+  application-server:
+    container_name: "kaseb-server"
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: kaseb-server:latest
+    #    restart: always
+    networks:
+      - kaseb-network
+    depends_on:
+      - postgresql
+    ports:
+      - "1212:1212"
+
+  postgresql:
+    image: postgres:11
+    container_name: "kaseb-postgresql"
+    restart: always
+    ports: 
+      - "5445:5432" 
+    environment:
+      POSTGRES_USER: kaseb 
+      POSTGRES_PASSWORD: kaseb
+      POSTGRES_DB: kaseb
+    networks:
+      - kaseb-network
+    volumes:
+      - kaseb-postgres-data:/var/lib/postgresql/data
+
