@@ -2,6 +2,7 @@ package io.kaseb.server.user.controller;
 
 import io.kaseb.server.base.RequestContext;
 import io.kaseb.server.exceptions.ServiceException;
+import io.kaseb.server.user.model.dto.request.RegisterWebsiteConfigRequestDto;
 import io.kaseb.server.user.model.dto.request.RegisterWebsiteRequestDto;
 import io.kaseb.server.user.model.dto.request.UpdateWebsiteRequestDto;
 import io.kaseb.server.user.model.dto.response.GetWebsitesResponseDto;
@@ -26,6 +27,14 @@ public class UserWebsiteController {
     public ResponseEntity<RegisterWebsiteResponseDto> registerWebsite(@RequestBody RegisterWebsiteRequestDto request)
             throws ServiceException {
         return ResponseEntity.ok(userService.registerWebsite(request, requestContext.getUser()));
+    }
+
+    @PostMapping("{websiteId}/configs")
+    public ResponseEntity<RegisterWebsiteResponseDto> registerWebsite(
+            @PathVariable("websiteId") String websiteId,
+            @RequestBody RegisterWebsiteConfigRequestDto request)
+            throws ServiceException {
+        return ResponseEntity.ok(userService.registerWebsiteConfig(request, websiteId, requestContext.getUser()));
     }
 
     @GetMapping

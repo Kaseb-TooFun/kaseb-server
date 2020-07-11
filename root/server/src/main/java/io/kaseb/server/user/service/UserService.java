@@ -6,6 +6,7 @@ import io.kaseb.server.user.model.dao.UserRepo;
 import io.kaseb.server.user.model.dao.WebsiteRepo;
 import io.kaseb.server.user.model.dto.BaseUserDto;
 import io.kaseb.server.user.model.dto.BaseWebsiteDto;
+import io.kaseb.server.user.model.dto.request.RegisterWebsiteConfigRequestDto;
 import io.kaseb.server.user.model.dto.request.RegisterWebsiteRequestDto;
 import io.kaseb.server.user.model.dto.request.UpdateWebsiteRequestDto;
 import io.kaseb.server.user.model.dto.response.GetWebsitesResponseDto;
@@ -93,5 +94,18 @@ public class UserService {
         websiteEntity.setDeleted(true);
         websiteRepo.save(websiteEntity);
         return null;
+    }
+
+    public RegisterWebsiteResponseDto registerWebsiteConfig(
+            RegisterWebsiteConfigRequestDto request, String websiteId, UserEntity user)
+            throws UnauthorizedAccessException, WebsiteNotFoundException {
+        WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
+        if (!user.equals(websiteEntity.getUser()))
+            throw new UnauthorizedAccessException();
+        websiteEntity.setConfig(request.getConfig());
+        final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteRepo.save(websiteEntity));
+        final BaseUserDto userDto = new BaseUserDto(user);
+        return new RegisterWebsiteResponseDto(websiteDto, userDto);
+
     }
 }

@@ -27,6 +27,8 @@ public class WebsiteEntity {
     private String title;
     @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean deleted;
+    @Column(name = "config", columnDefinition = "TEXT")
+    private String config;
 
     public WebsiteEntity(UserEntity user, String url, String title) {
         this.user = user;

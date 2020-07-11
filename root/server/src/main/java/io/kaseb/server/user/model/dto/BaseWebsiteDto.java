@@ -8,9 +8,9 @@ import lombok.Data;
  */
 @Data
 public class BaseWebsiteDto {
-    private final String id;
-    private final String title;
-    private final String url;
+    private String id;
+    private String title;
+    private String url;
 
     public BaseWebsiteDto(WebsiteEntity websiteEntity) {
         this.id = websiteEntity.getId();
