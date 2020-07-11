@@ -17,10 +17,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/api/v1/authenticate/signup")
-                .excludePathPatterns("/api/v1/authenticate/login")
-                .excludePathPatterns("/api/v1/verify")
-                .excludePathPatterns("/swagger-resources/**");
+                .excludePathPatterns(
+                        "/api/v1/authenticate/signup/**",
+                        "/api/v1/authenticate/login/**",
+                        "/api/v1/verify/**",
+                        "/v2/api-docs",
+                        "/swagger-ui.html",
+                        "/webjars/**",
+                        "/swagger-resources/**");
     }
 
     @Override
