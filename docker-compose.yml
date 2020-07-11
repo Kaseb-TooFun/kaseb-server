@@ -20,6 +20,10 @@ services:
       - postgresql
     ports:
       - "1212:1212"
+    environment:
+      - SPRING_DATASOURCE_URL="jdbc:postgresql://db:5432/kaseb"
+      - SPRING_DATASOURCE_USERNAME="kaseb"
+      - SPRING_DATASOURCE_PASSWORD="NiczSsNc4t4AEJ7"
 
   postgresql:
     image: postgres:11
