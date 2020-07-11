@@ -31,6 +31,8 @@ maven-test:
     - if: $CI_COMMIT_TAG
     - if: '$CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_PIPELINE_SOURCE == "chat"'
+  tags:
+    - arvan
 
 maven-build:
   image: maven:3-jdk-11
@@ -44,6 +46,8 @@ maven-build:
     - if: $CI_COMMIT_TAG
     - if: '$CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_PIPELINE_SOURCE == "chat"'
+  tags:
+    - arvan
 
 docker-build:
   stage: package
@@ -55,6 +59,8 @@ docker-build:
     - if: $CI_COMMIT_TAG
     - if: '$CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_PIPELINE_SOURCE == "chat"'
+  tags:
+    - arvan
 
 arvan-deploy:
   image: mormoroth/arvancli
