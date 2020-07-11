@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 /**
  * @author Seyyed Mahdiyar Zerehpoush
  */
-@SpringBootApplication(scanBasePackages = "io.kaseb")
+@SpringBootApplication
 @EnableWebMvc
 @EnableConfigurationProperties
 public class Application {
