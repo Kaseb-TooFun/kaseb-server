@@ -7,5 +7,5 @@ import lombok.Data;
  */
 @Data
 public class UpdateWebsiteRequestDto {
-    private final String title;
+    private String title;
 }

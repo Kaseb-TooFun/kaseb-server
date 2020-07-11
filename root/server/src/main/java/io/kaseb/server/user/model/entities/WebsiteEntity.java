@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -25,10 +26,24 @@ public class WebsiteEntity {
     @Column(name = "title")
     private String title;
     @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean deletd;
+    private boolean deleted;
 
-    public WebsiteEntity(UserEntity user, String url) {
+    public WebsiteEntity(UserEntity user, String url, String title) {
         this.user = user;
         this.url = url;
+        this.title = title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WebsiteEntity)) return false;
+        WebsiteEntity that = (WebsiteEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

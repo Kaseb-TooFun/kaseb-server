@@ -7,5 +7,6 @@ import lombok.Data;
  */
 @Data
 public class RegisterWebsiteRequestDto {
+    private String title;
     private String websiteUrl;
 }

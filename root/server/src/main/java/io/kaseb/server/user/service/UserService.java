@@ -56,19 +56,22 @@ public class UserService {
         final String url = request.getWebsiteUrl();
         if (websiteRepo.existsByUrl(url))
             throw new WebsiteExistsException();
-        WebsiteEntity websiteEntity = new WebsiteEntity(user, url);
+        WebsiteEntity websiteEntity = new WebsiteEntity(user, url, request.getTitle());
         websiteEntity = websiteRepo.save(websiteEntity);
         final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteRepo.save(websiteEntity));
         final BaseUserDto userDto = new BaseUserDto(user);
         return new RegisterWebsiteResponseDto(websiteDto, userDto);
     }
 
-    public GetWebsitesResponseDto getWebsite(UserEntity user) {
+    public GetWebsitesResponseDto getWebsite(UserEntity user) throws UserNotFoundException {
+        user = userRepo.findById(user.getId()).orElseThrow(UserNotFoundException::new);//doing this for reattaching entity
         final List<WebsiteEntity> websites = user.getWebsites();
         List<BaseWebsiteDto> websiteDtoList;
         if (CollectionUtils.isEmpty(websites))
             websiteDtoList = Collections.emptyList();
-        websiteDtoList = websites.stream().map(BaseWebsiteDto::new).collect(Collectors.toList());
+        else
+            websiteDtoList = websites.stream()
+                    .filter(i -> !i.isDeleted()).map(BaseWebsiteDto::new).collect(Collectors.toList());
         return new GetWebsitesResponseDto(websiteDtoList);
     }
 
@@ -87,7 +90,7 @@ public class UserService {
         WebsiteEntity websiteEntity = websiteRepo.findById(id).orElseThrow(WebsiteNotFoundException::new);
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
-        websiteEntity.setDeletd(true);
+        websiteEntity.setDeleted(true);
         websiteRepo.save(websiteEntity);
         return null;
     }

@@ -29,8 +29,7 @@ public class UserWebsiteController {
     }
 
     @GetMapping
-    public ResponseEntity<GetWebsitesResponseDto> getWebsites()
-            throws ServiceException {
+    public ResponseEntity<GetWebsitesResponseDto> getWebsites() throws ServiceException {
         return ResponseEntity.ok(userService.getWebsite(requestContext.getUser()));
     }
 
