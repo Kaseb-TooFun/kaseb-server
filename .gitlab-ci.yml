@@ -64,7 +64,7 @@ nl-deploy:
   stage: deploy
   script:
     - whoami
-    - sudo docker-compose pull server
+    - sudo docker-compose -f /docker-compose.yml pull server
     - docker-compose up -d
 #  - echo -e "$ARVAN_CLI_TOKEN\n"
 #  - echo -e "$ARVAN_CLI_TOKEN\n" | arvan login
