@@ -27,10 +27,10 @@ maven-test:
       junit:
         - root/server/target/surefire-reports/TEST-*.xml
         - root/server/target/failsafe-reports/TEST-*.xml
-  rules:
-    - if: $CI_COMMIT_TAG
-    - if: '$CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_PIPELINE_SOURCE == "chat"'
+  # rules:
+  #   - if: $CI_COMMIT_TAG
+  #   - if: '$CI_PIPELINE_SOURCE == "web"'
+  #   - if: '$CI_PIPELINE_SOURCE == "chat"'
   tags:
     - arvan
 
