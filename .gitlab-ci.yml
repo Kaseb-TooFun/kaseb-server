@@ -63,8 +63,8 @@ docker-build:
 nl-deploy:
   stage: deploy
   script:
-    - sudo docker-compose pull server
-    - sudo docker-compose up -d
+    - docker-compose pull server
+    - docker-compose up -d
 #  - echo -e "$ARVAN_CLI_TOKEN\n"
 #  - echo -e "$ARVAN_CLI_TOKEN\n" | arvan login
 #  - arvan paas status
