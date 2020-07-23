@@ -16,11 +16,11 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/base-info")
-@IgnoreAuthentication
 @RequiredArgsConstructor
 public class BaseInfoController {
     private final BaseInfoService baseInfoService;
 
+    @IgnoreAuthentication
     @GetMapping("/errors")
     public ResponseEntity<List<ErrorResponse>> errors() {
         return ResponseEntity.ok(baseInfoService.getErrors());

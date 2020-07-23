@@ -29,8 +29,7 @@ public class RestApiAuthenticationInterceptor implements HandlerInterceptor {
         boolean checkAuthentication = true;
         if (handler instanceof HandlerMethod) {
             Method method = ((HandlerMethod) handler).getMethod();
-            if (method.isAnnotationPresent(IgnoreAuthentication.class)
-                    || method.getClass().isAnnotationPresent(IgnoreAuthentication.class))
+            if (method.isAnnotationPresent(IgnoreAuthentication.class))
                 checkAuthentication = false;
         }
         if (checkAuthentication)
