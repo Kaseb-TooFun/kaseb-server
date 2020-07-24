@@ -30,7 +30,7 @@ public class SwaggerConfig {
                 .title("Kaseb REST API Documentation")
                 .description("Here you can find provided REST methods usages and descriptions. " +
                         "Note the all authorization is done by Authorization header.")
-                .contact(new Contact("Kasev", "kaseb.io", "info@kaseb.io"))
+                .contact(new Contact("kaseb", "kaseb.io", "info@kaseb.io"))
                 .version("0.0.1")
                 .build();
     }

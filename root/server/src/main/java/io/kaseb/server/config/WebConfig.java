@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(interceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
+                        "/error",
                         "/api/v1/authenticate/**",
                         "/api/v1/verify/**",
                         "/monitoring/**",
