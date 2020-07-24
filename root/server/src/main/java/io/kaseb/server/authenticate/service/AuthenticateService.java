@@ -116,7 +116,7 @@ public class AuthenticateService {
     }
 
     private String extractTokenFromHeader(HttpServletRequest request) {
-        return request.getHeader(AUTHORIZATION_HEADER);
+        return request == null ? null : request.getHeader(AUTHORIZATION_HEADER);
     }
 
     private UserEntity authenticate(String plainToken) throws AuthenticationException {
