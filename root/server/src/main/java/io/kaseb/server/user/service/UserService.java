@@ -82,9 +82,20 @@ public class UserService {
         WebsiteEntity websiteEntity = websiteRepo.findById(id).orElseThrow(WebsiteNotFoundException::new);
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
-        websiteEntity.setTitle(request.getTitle());
+        updateWebsite(websiteEntity, request.getTitle());
+        updateWebsite(websiteEntity, request.getConfigs());
         final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteRepo.save(websiteEntity));
         return new UpdateWebsiteResponseDto(websiteDto);
+    }
+
+    private void updateWebsite(WebsiteEntity websiteEntity, String title) {
+        if (title != null)
+            websiteEntity.setTitle(title);
+    }
+
+    private void updateWebsite(WebsiteEntity websiteEntity, List<Config> configs) {
+        if (configs != null)
+            websiteEntity.setConfigs(configs);
     }
 
     public Void deleteWebsite(String id, UserEntity user)
