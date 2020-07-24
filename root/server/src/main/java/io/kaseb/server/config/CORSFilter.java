@@ -22,7 +22,7 @@ public class CORSFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String requestOrigin = ((HttpServletRequest) servletRequest).getHeader("Origin");
         if (requestOrigin != null) {
-            response.setHeader("Access-Control-Allow-Origin", "*.mykaseb.ir");
+            response.setHeader("Access-Control-Allow-Origin", "dev-api.mykaseb.ir, mykaseb.ir");
         }
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS, HEAD");
         response.setHeader("Access-Control-Max-Age", "3600");
