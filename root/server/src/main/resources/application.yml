@@ -24,8 +24,9 @@ management:
       exposure:
         include: "*"
       base-path: "/monitoring"
-#logging:
-#  level: info
+logging:
+  level:
+    root: debug
 
 monitoring:
   user: kaseb
