@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Seyyed Mahdiyar Zerehpoush
  */
-@IgnoreAuthentication
 @RequestMapping("/api/v1/website")
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class WebsiteController {
 
     @ApiOperation("Get Website Configs")
     @GetMapping("/configs")
+    @IgnoreAuthentication
     public ResponseEntity<GetWebsiteConfigResponseDto> getWebsiteConfig(
             @RequestParam("websiteUrl") String websiteUrl) throws ServiceException {
         return ResponseEntity.ok(websiteService.getWebsiteConfigs(websiteUrl));
