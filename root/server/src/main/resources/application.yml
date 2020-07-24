@@ -9,3 +9,21 @@ spring:
     url: "jdbc:postgresql://localhost:5432/kaseb"
     username: "kaseb"
     password: "kaseb"
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+monitoring:
+  user: kaseb
+  password: HW9Z954sefKxpWDDtcxEaZF2MEtQAccBW2Sb4B4ng22JThDUs9rSDccyRXP3
