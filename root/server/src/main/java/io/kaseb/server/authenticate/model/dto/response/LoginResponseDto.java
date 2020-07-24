@@ -8,4 +8,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginResponseDto {
     private final BaseUserDto user;
+    private final String token;
 }

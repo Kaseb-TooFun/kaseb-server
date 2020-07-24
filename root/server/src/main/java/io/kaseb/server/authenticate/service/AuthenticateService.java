@@ -42,7 +42,7 @@ public class AuthenticateService {
         final Pair<SessionEntity, String> sessionPair = createSession(userEntity);
         final BaseUserDto userDto = new BaseUserDto(userEntity);
         setAuthenticationInfoInResponse(response, sessionPair);
-        return new LoginResponseDto(userDto);
+        return new LoginResponseDto(userDto, sessionPair.getSecond());
     }
 
     private void setAuthenticationInfoInResponse(HttpServletResponse response, Pair<SessionEntity, String> sessionPair) {
