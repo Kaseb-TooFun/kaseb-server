@@ -1,5 +1,6 @@
 package io.kaseb.server.verify.controller;
 
+import io.kaseb.server.authenticate.model.annotations.IgnoreAuthentication;
 import io.kaseb.server.verify.response.VerifyResponseDto;
 import io.kaseb.server.verify.service.VerifyService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class VerifyController {
     private final VerifyService verifyService;
 
     @GetMapping
+    @IgnoreAuthentication
     public ResponseEntity<VerifyResponseDto> verify() {
         return ResponseEntity.ok(verifyService.verify());
     }
