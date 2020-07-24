@@ -4,12 +4,14 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @author Seyyed Mahdiyar Zerehpoush
  */
 @ToString
 @Data
-public class ErrorResponse {
+public class ErrorResponse implements Serializable {
     private final Integer errorCode;
     private final String errorMessage;
     @Setter

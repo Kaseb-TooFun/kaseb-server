@@ -95,17 +95,20 @@ public class AuthenticateService {
     }
 
     private String extractPlainToken(HttpServletRequest request) throws AuthenticationException {
-        final String bearerTokenFromHeader = extractTokenFromHeader(request);
-        if (!StringUtils.isEmpty(bearerTokenFromHeader))
+        logger.info("trying to extract plain token from request");
+        String bearerTokenFromHeader = extractTokenFromHeader(request);
+        if (bearerTokenFromHeader != null && !StringUtils.isEmpty(bearerTokenFromHeader))
             return bearerTokenFromHeader.replace(AUTHORIZATION_HEADER_BASE, "");
-//        final String bearerTokenFromCookie = extractTokenFromCookie(request);
-//        if (!StringUtils.isEmpty(bearerTokenFromCookie))
-//            return bearerTokenFromCookie;
+        logger.error("request does not have authorization header");
+        String bearerTokenFromCookie = extractTokenFromCookie(request);
+        if (bearerTokenFromCookie != null && !StringUtils.isEmpty(bearerTokenFromCookie))
+            return bearerTokenFromCookie;
+        logger.error("request does not have authorization cookie");
         throw new AuthenticationException();
     }
 
     private String extractTokenFromCookie(HttpServletRequest request) {
-        if (request.getCookies() == null)
+        if (request == null || request.getCookies() == null)
             return null;
         for (Cookie cookie : request.getCookies()) {
             if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
