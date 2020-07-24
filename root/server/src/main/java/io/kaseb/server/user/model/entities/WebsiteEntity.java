@@ -33,7 +33,7 @@ public class WebsiteEntity {
     @Column(name = "configs", columnDefinition = "TEXT")
     @Convert(converter = ConfigConverter.class)
     @ElementCollection
-    private List<Config> config;
+    private List<Config> configs;
 
     public WebsiteEntity(UserEntity user, String url, String title) {
         this.user = user;
