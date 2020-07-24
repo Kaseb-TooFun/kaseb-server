@@ -1,9 +1,12 @@
 package io.kaseb.server.user.model.entities;
 
+import io.kaseb.server.user.model.Config;
+import io.kaseb.server.user.model.converter.ConfigConverter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,8 +30,10 @@ public class WebsiteEntity {
     private String title;
     @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean deleted;
-    @Column(name = "config", columnDefinition = "TEXT")
-    private String config;
+    @Column(name = "configs", columnDefinition = "TEXT")
+    @Convert(converter = ConfigConverter.class)
+    @ElementCollection
+    private List<Config> config;
 
     public WebsiteEntity(UserEntity user, String url, String title) {
         this.user = user;

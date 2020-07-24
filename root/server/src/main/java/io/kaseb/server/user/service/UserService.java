@@ -2,6 +2,7 @@ package io.kaseb.server.user.service;
 
 import io.kaseb.server.exceptions.ServiceException;
 import io.kaseb.server.user.exceptions.*;
+import io.kaseb.server.user.model.Config;
 import io.kaseb.server.user.model.dao.UserRepo;
 import io.kaseb.server.user.model.dao.WebsiteRepo;
 import io.kaseb.server.user.model.dto.BaseUserDto;
@@ -102,7 +103,8 @@ public class UserService {
         WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
-        websiteEntity.setConfig(request.getConfig());
+        if (!CollectionUtils.isEmpty(request.getConfigs()))
+            websiteEntity.setConfig(request.getConfigs().stream().map(Config::new).collect(Collectors.toList()));
         final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteRepo.save(websiteEntity));
         final BaseUserDto userDto = new BaseUserDto(user);
         return new RegisterWebsiteResponseDto(websiteDto, userDto);
