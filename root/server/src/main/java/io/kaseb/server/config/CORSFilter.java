@@ -2,40 +2,31 @@
 //
 //
 //import org.springframework.stereotype.Component;
+//import org.springframework.web.filter.OncePerRequestFilter;
 //
-//import javax.servlet.*;
+//import javax.servlet.FilterChain;
+//import javax.servlet.ServletException;
 //import javax.servlet.http.HttpServletRequest;
 //import javax.servlet.http.HttpServletResponse;
 //import java.io.IOException;
 //
 //@Component
-//public class CORSFilter implements Filter {
+//public class CORSFilter extends OncePerRequestFilter {
 //
 //    @Override
-//    public void init(FilterConfig filterConfig) {
-////        no implementation
-//    }
-//
-//    @Override
-//    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-//            throws IOException, ServletException {
-//        HttpServletResponse response = (HttpServletResponse) servletResponse;
-//        String requestOrigin = ((HttpServletRequest) servletRequest).getHeader("Origin");
-//        if (requestOrigin != null) {
-//            response.setHeader("Access-Control-Allow-Origin", "*");
-//        }
-//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS, HEAD");
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+//            throws ServletException, IOException {
 //        response.setHeader("Access-Control-Max-Age", "3600");
-//        response.setHeader("Access-Control-Allow-Headers",
-//                "X-Requested-With, Content-Type, Origin, Authorization");
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//        response.setHeader("Access-Control-Allow-Methods", "*");
+//        response.setHeader("Access-Control-Allow-Headers", "*");
 //        response.setHeader("Access-Control-Allow-Credentials", "true");
 //        response.setHeader("Access-Control-Expose-Headers",
 //                "Content-Type, Origin, Accept, X-Requested-With, Authorization");
-//        filterChain.doFilter(servletRequest, response);
-//    }
-//
-//    @Override
-//    public void destroy() {
-////        no implementation
+////
+//        if ("OPTIONS".equals(request.getMethod())) {
+//            response.setStatus(HttpServletResponse.SC_OK);
+//        }
+//        filterChain.doFilter(request, response);
 //    }
 //}
