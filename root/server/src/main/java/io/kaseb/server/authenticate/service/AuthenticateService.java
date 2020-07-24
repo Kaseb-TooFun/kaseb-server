@@ -47,7 +47,7 @@ public class AuthenticateService {
 
     private void setAuthenticationInfoInResponse(HttpServletResponse response, Pair<SessionEntity, String> sessionPair) {
         response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + sessionPair.getSecond());
-        response.addCookie(createCookie(sessionPair.getSecond()));
+//        response.addCookie(createCookie(sessionPair.getSecond()));
     }
 
     private Cookie createCookie(String plainToken) {
@@ -98,9 +98,9 @@ public class AuthenticateService {
         final String bearerTokenFromHeader = extractTokenFromHeader(request);
         if (!StringUtils.isEmpty(bearerTokenFromHeader))
             return bearerTokenFromHeader.replace(AUTHORIZATION_HEADER_BASE, "");
-        final String bearerTokenFromCookie = extractTokenFromCookie(request);
-        if (!StringUtils.isEmpty(bearerTokenFromCookie))
-            return bearerTokenFromCookie;
+//        final String bearerTokenFromCookie = extractTokenFromCookie(request);
+//        if (!StringUtils.isEmpty(bearerTokenFromCookie))
+//            return bearerTokenFromCookie;
         throw new AuthenticationException();
     }
 
