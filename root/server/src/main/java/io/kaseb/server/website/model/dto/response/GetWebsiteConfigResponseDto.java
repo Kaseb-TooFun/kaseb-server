@@ -12,10 +12,10 @@ import java.util.List;
  */
 @Data
 public class GetWebsiteConfigResponseDto extends BaseWebsiteDto {
-    private List<Config> conifgs;
+    private List<Config> configs;
 
     public GetWebsiteConfigResponseDto(WebsiteEntity websiteEntity) {
         super(websiteEntity);
-        this.conifgs = websiteEntity.getConfig();
+        this.configs = websiteEntity.getConfigs();
     }
 }

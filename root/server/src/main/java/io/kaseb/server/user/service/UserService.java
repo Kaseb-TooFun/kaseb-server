@@ -104,7 +104,7 @@ public class UserService {
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
         if (!CollectionUtils.isEmpty(request.getConfigs()))
-            websiteEntity.setConfig(request.getConfigs().stream().map(Config::new).collect(Collectors.toList()));
+            websiteEntity.setConfigs(request.getConfigs().stream().map(Config::new).collect(Collectors.toList()));
         final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteRepo.save(websiteEntity));
         final BaseUserDto userDto = new BaseUserDto(user);
         return new RegisterWebsiteResponseDto(websiteDto, userDto);
