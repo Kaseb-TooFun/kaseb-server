@@ -1,9 +1,6 @@
 package io.kaseb.server.user.model.dto.request;
 
-import io.kaseb.server.user.model.Config;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author Seyyed Mahdiyar Zerehpoush
@@ -11,5 +8,4 @@ import java.util.List;
 @Data
 public class UpdateWebsiteRequestDto {
     private String title;
-    private List<Config> configs;
 }

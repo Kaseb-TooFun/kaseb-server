@@ -1,8 +1,8 @@
 package io.kaseb.server.user.model.dto.response;
 
 import io.kaseb.server.user.model.dto.BaseWebsiteDto;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class GetWebsitesResponseDto {
-    private final List<BaseWebsiteDto> websites;
+    private List<BaseWebsiteDto> websites;
 }

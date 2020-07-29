@@ -1,7 +1,6 @@
-package io.kaseb.server.user.model.entities;
+package io.kaseb.server.website.model.entities;
 
-import io.kaseb.server.user.model.Config;
-import io.kaseb.server.user.model.converter.ConfigConverter;
+import io.kaseb.server.user.model.entities.UserEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,10 +29,8 @@ public class WebsiteEntity {
     private String title;
     @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean deleted;
-    @Column(name = "configs", columnDefinition = "TEXT")
-    @Convert(converter = ConfigConverter.class)
-    @ElementCollection
-    private List<Config> configs;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "website")
+    private List<WebsiteConfigEntity> configs;
 
     public WebsiteEntity(UserEntity user, String url, String title) {
         this.user = user;

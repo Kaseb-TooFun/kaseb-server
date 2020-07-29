@@ -15,6 +15,7 @@ public enum ServiceExceptions {
     WEBSITE_EXISTS(1005, "website_exists"),
     WEBSITE_NOT_FOUND(1006, "website_not_found"),
     UNAUTHORIZED_ACTION(1007, "unauthorized_action"),
+    WEBSITE_CONFIG_NOT_FOUND(1006, "website_config_not_found"),
     ;
 
 

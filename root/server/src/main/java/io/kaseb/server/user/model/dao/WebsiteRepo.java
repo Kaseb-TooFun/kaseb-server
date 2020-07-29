@@ -1,6 +1,6 @@
 package io.kaseb.server.user.model.dao;
 
-import io.kaseb.server.user.model.entities.WebsiteEntity;
+import io.kaseb.server.website.model.entities.WebsiteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

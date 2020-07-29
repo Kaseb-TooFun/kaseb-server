@@ -1,5 +1,6 @@
 package io.kaseb.server.user.model.entities;
 
+import io.kaseb.server.website.model.entities.WebsiteEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

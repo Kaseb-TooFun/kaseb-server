@@ -1,6 +1,6 @@
 package io.kaseb.server.user.model.dto;
 
-import io.kaseb.server.user.model.entities.WebsiteEntity;
+import io.kaseb.server.website.model.entities.WebsiteEntity;
 import lombok.Data;
 
 /**
