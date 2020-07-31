@@ -21,7 +21,7 @@ public class UserEntity {
     private String username;
     @Column(name = "hashed_password")
     private String hashedPassword;
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     private List<WebsiteEntity> websites;
 
     public UserEntity(String username, String hashedPassword) {
