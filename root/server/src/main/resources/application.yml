@@ -4,11 +4,16 @@ spring:
   jpa:
     database: POSTGRESQL
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   datasource:
     url: "jdbc:postgresql://localhost:5432/kaseb"
     username: "kaseb"
     password: "kaseb"
+  liquibase:
+    enabled: true
+    dropFirst: false
+    changeLog: "classpath:/db/changelog/db.changelog-master.xml"
+
 management:
   metrics:
     export:
