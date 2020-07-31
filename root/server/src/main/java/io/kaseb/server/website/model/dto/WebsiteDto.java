@@ -6,6 +6,7 @@ import io.kaseb.server.website.model.entities.WebsiteEntity;
 import lombok.Data;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,5 +18,7 @@ public class WebsiteDto extends BaseWebsiteDto {
         super(websiteEntity);
         if (!CollectionUtils.isEmpty(websiteEntity.getConfigs()))
             this.configs = websiteEntity.getConfigs().stream().map(ConfigDto::new).collect(Collectors.toList());
+        else
+            this.configs = Collections.emptyList();
     }
 }

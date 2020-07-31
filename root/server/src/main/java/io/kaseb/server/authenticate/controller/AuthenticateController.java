@@ -25,8 +25,9 @@ public class AuthenticateController {
     private final AuthenticateService authenticateService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto request) throws ServiceException {
-        return ResponseEntity.ok(authenticateService.signup(request));
+    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto request, HttpServletResponse response
+    ) throws ServiceException {
+        return ResponseEntity.ok(authenticateService.signup(request, response));
     }
 
     @PostMapping("/login")

@@ -79,15 +79,21 @@ public class WebsiteService {
             throw new UnauthorizedAccessException();
         if (!CollectionUtils.isEmpty(websiteEntity.getConfigs()))
             websiteEntity.setConfigs(new ArrayList<>());
-        WebsiteConfigEntity websiteConfigEntity = new WebsiteConfigEntity(websiteEntity, request.getConfigValue());
-        websiteConfigEntity = websiteConfigRepo.save(websiteConfigEntity);
-        ConfigDto configDto = new ConfigDto(websiteConfigEntity);
-        return new CreateWebsiteConfigResponseDto(configDto);
+        if (CollectionUtils.isEmpty(request.getConfigValues()))
+            return new CreateWebsiteConfigResponseDto();
+        final List<ConfigDto> configDtos = new ArrayList<>(request.getConfigValues().size());
+        for (String configValue : request.getConfigValues()) {
+            WebsiteConfigEntity websiteConfigEntity = new WebsiteConfigEntity(websiteEntity, configValue);
+            websiteConfigEntity = websiteConfigRepo.save(websiteConfigEntity);
+            ConfigDto configDto = new ConfigDto(websiteConfigEntity);
+            configDtos.add(configDto);
+        }
+        return new CreateWebsiteConfigResponseDto(configDtos);
 
     }
 
     public UpdateWebsiteConfigResponseDto updateWebsiteConfig(
-            UpdateWebsiteConfigRequestDto request, String configId, UserEntity user)
+            UpdateWebsiteConfigRequestDto request, String websiteId, String configId, UserEntity user)
             throws UnauthorizedAccessException, WebsiteConfigNotFoundException {
         WebsiteConfigEntity websiteConfigEntity =
                 websiteConfigRepo.findById(configId).orElseThrow(WebsiteConfigNotFoundException::new);
@@ -98,10 +104,10 @@ public class WebsiteService {
         return new UpdateWebsiteConfigResponseDto(websiteConfigEntity);
     }
 
-    public Void deleteWebsiteConfig(String id, UserEntity user)
+    public Void deleteWebsiteConfig(String websiteId, String configId, UserEntity user)
             throws WebsiteConfigNotFoundException, UnauthorizedAccessException {
         WebsiteConfigEntity websiteConfigEntity =
-                websiteConfigRepo.findById(id).orElseThrow(WebsiteConfigNotFoundException::new);
+                websiteConfigRepo.findById(configId).orElseThrow(WebsiteConfigNotFoundException::new);
         if (!Objects.equals(websiteConfigEntity.getWebsite().getUser(), user))
             throw new UnauthorizedAccessException();
         websiteConfigRepo.delete(websiteConfigEntity);

@@ -28,9 +28,8 @@ public class WebsiteConfigController {
     @GetMapping
     @IgnoreAuthentication
     public ResponseEntity<GetWebsiteConfigResponseDto> getWebsiteConfig(
-            @RequestParam("websiteUrl") String websiteUrl,
             @PathVariable("websiteId") String websiteId) throws ServiceException {
-        return ResponseEntity.ok(websiteService.getWebsiteConfigs(websiteUrl, websiteId));
+        return ResponseEntity.ok(websiteService.getWebsiteConfigs(null, websiteId));
     }
 
     @ApiOperation("Create Website Config")
@@ -43,18 +42,21 @@ public class WebsiteConfigController {
     }
 
     @ApiOperation("Update Website Config")
-    @PutMapping("/{id}")
+    @PutMapping("/{configId}")
     public ResponseEntity<UpdateWebsiteConfigResponseDto> updateWebsiteConfig(
             @RequestBody UpdateWebsiteConfigRequestDto request,
-            @PathVariable("id") String id)
+            @PathVariable("websiteId") String websiteId,
+            @PathVariable("configId") String configId)
             throws ServiceException {
-        return ResponseEntity.ok(websiteService.updateWebsiteConfig(request, id, requestContext.getUser()));
+        return ResponseEntity.ok(websiteService.updateWebsiteConfig(request, websiteId, configId,
+                requestContext.getUser()));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{configId}")
     public ResponseEntity<Void> deleteWebsiteConfig(
-            @PathVariable("id") String id)
+            @PathVariable("websiteId") String websiteId,
+            @PathVariable("configId") String configId)
             throws ServiceException {
-        return ResponseEntity.ok(websiteService.deleteWebsiteConfig(id, requestContext.getUser()));
+        return ResponseEntity.ok(websiteService.deleteWebsiteConfig(websiteId, configId, requestContext.getUser()));
     }
 }

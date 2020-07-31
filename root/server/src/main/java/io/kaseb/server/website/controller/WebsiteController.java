@@ -1,5 +1,6 @@
 package io.kaseb.server.website.controller;
 
+import io.kaseb.server.authenticate.model.annotations.IgnoreAuthentication;
 import io.kaseb.server.base.RequestContext;
 import io.kaseb.server.exceptions.ServiceException;
 import io.kaseb.server.user.model.dto.request.RegisterWebsiteRequestDto;
@@ -7,6 +8,7 @@ import io.kaseb.server.user.model.dto.request.UpdateWebsiteRequestDto;
 import io.kaseb.server.user.model.dto.response.GetWebsitesResponseDto;
 import io.kaseb.server.user.model.dto.response.RegisterWebsiteResponseDto;
 import io.kaseb.server.user.model.dto.response.UpdateWebsiteResponseDto;
+import io.kaseb.server.website.model.dto.response.GetWebsiteConfigResponseDto;
 import io.kaseb.server.website.model.dto.response.GetWebsiteResponseDto;
 import io.kaseb.server.website.service.WebsiteService;
 import io.swagger.annotations.ApiOperation;
@@ -58,5 +60,14 @@ public class WebsiteController {
             throws ServiceException {
         return ResponseEntity.ok(websiteService.deleteWebsite(id, requestContext.getUser()));
     }
+
+    @ApiOperation("Get Website Configs")
+    @GetMapping("/configs")
+    @IgnoreAuthentication
+    public ResponseEntity<GetWebsiteConfigResponseDto> getWebsiteConfig(
+            @RequestParam("websiteUrl") String websiteUrl) throws ServiceException {
+        return ResponseEntity.ok(websiteService.getWebsiteConfigs(websiteUrl, null));
+    }
+
 
 }

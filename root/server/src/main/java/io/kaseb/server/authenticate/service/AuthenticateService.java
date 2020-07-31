@@ -47,7 +47,7 @@ public class AuthenticateService {
 
     private void setAuthenticationInfoInResponse(HttpServletResponse response, Pair<SessionEntity, String> sessionPair) {
         response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + sessionPair.getSecond());
-//        response.addCookie(createCookie(sessionPair.getSecond()));
+        response.addCookie(createCookie(sessionPair.getSecond()));
     }
 
     private Cookie createCookie(String plainToken) {
@@ -70,9 +70,11 @@ public class AuthenticateService {
         return Base64Utils.encodeToString(randomBytes);
     }
 
-    public SignupResponseDto signup(SignupRequestDto request) throws ServiceException {
+    public SignupResponseDto signup(SignupRequestDto request, HttpServletResponse response) throws ServiceException {
         final String hashedPassword = hash(request.getPassword());
         final UserEntity user = userService.signup(request.getUsername(), hashedPassword);
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(request.getUsername(), request.getPassword());
+        this.login(loginRequestDto, response);
         final BaseUserDto userDto = new BaseUserDto(user);
         return new SignupResponseDto(userDto);
     }
