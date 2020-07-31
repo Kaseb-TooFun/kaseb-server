@@ -41,4 +41,13 @@ public class UserEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("UserEntity{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", username='").append(username).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

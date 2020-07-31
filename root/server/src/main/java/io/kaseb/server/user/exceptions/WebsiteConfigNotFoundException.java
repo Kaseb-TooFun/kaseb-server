@@ -9,6 +9,6 @@ import org.springframework.http.HttpStatus;
  */
 public class WebsiteConfigNotFoundException extends ServiceException {
     public WebsiteConfigNotFoundException() {
-        super(HttpStatus.NOT_FOUND, ServiceExceptions.WEBSITE_NOT_FOUND);
+        super(HttpStatus.NOT_FOUND, ServiceExceptions.WEBSITE_CONFIG_NOT_FOUND);
     }
 }

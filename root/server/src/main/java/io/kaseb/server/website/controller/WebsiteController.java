@@ -8,7 +8,7 @@ import io.kaseb.server.user.model.dto.request.UpdateWebsiteRequestDto;
 import io.kaseb.server.user.model.dto.response.GetWebsitesResponseDto;
 import io.kaseb.server.user.model.dto.response.RegisterWebsiteResponseDto;
 import io.kaseb.server.user.model.dto.response.UpdateWebsiteResponseDto;
-import io.kaseb.server.website.model.dto.response.GetWebsiteConfigResponseDto;
+import io.kaseb.server.website.model.dto.response.GetWebsiteConfigsResponseDto;
 import io.kaseb.server.website.model.dto.response.GetWebsiteResponseDto;
 import io.kaseb.server.website.service.WebsiteService;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +43,7 @@ public class WebsiteController {
     @GetMapping("/{websiteId}")
     public ResponseEntity<GetWebsiteResponseDto> getWebsites(
             @PathVariable("websiteId") String websiteId) throws ServiceException {
-        return ResponseEntity.ok(websiteService.getWebsites(websiteId));
+        return ResponseEntity.ok(websiteService.getWebsite(websiteId));
     }
 
     @PutMapping("/{id}")
@@ -64,7 +64,7 @@ public class WebsiteController {
     @ApiOperation("Get Website Configs")
     @GetMapping("/configs")
     @IgnoreAuthentication
-    public ResponseEntity<GetWebsiteConfigResponseDto> getWebsiteConfig(
+    public ResponseEntity<GetWebsiteConfigsResponseDto> getWebsiteConfig(
             @RequestParam("websiteUrl") String websiteUrl) throws ServiceException {
         return ResponseEntity.ok(websiteService.getWebsiteConfigs(websiteUrl, null));
     }

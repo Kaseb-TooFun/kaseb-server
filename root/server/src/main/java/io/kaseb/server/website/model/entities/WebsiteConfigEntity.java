@@ -41,4 +41,13 @@ public class WebsiteConfigEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("WebsiteConfigEntity{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", configValue='").append(configValue).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

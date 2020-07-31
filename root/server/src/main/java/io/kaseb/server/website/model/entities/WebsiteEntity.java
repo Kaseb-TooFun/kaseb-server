@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,8 +28,6 @@ public class WebsiteEntity {
     private String title;
     @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean deleted;
-    @OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER, mappedBy = "website")
-    private List<WebsiteConfigEntity> configs;
 
     public WebsiteEntity(UserEntity user, String url, String title) {
         this.user = user;
@@ -49,5 +46,15 @@ public class WebsiteEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("WebsiteEntity{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", url='").append(url).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

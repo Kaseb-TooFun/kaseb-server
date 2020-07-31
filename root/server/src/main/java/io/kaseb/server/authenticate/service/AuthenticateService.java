@@ -102,11 +102,11 @@ public class AuthenticateService {
         String bearerTokenFromHeader = extractTokenFromHeader(request);
         if (bearerTokenFromHeader != null && !StringUtils.isEmpty(bearerTokenFromHeader))
             return bearerTokenFromHeader.replace(AUTHORIZATION_HEADER_BASE, "");
-        logger.error("request does not have authorization header");
+        logger.info("request does not have authorization header");
         String bearerTokenFromCookie = extractTokenFromCookie(request);
         if (bearerTokenFromCookie != null && !StringUtils.isEmpty(bearerTokenFromCookie))
             return bearerTokenFromCookie;
-        logger.error("request does not have authorization cookie");
+        logger.info("request does not have authorization cookie");
         throw new AuthenticationException();
     }
 

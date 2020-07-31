@@ -18,7 +18,7 @@ import io.kaseb.server.website.model.dao.WebsiteConfigRepo;
 import io.kaseb.server.website.model.dto.request.CreateWebsiteConfigRequestDto;
 import io.kaseb.server.website.model.dto.request.UpdateWebsiteConfigRequestDto;
 import io.kaseb.server.website.model.dto.response.CreateWebsiteConfigResponseDto;
-import io.kaseb.server.website.model.dto.response.GetWebsiteConfigResponseDto;
+import io.kaseb.server.website.model.dto.response.GetWebsiteConfigsResponseDto;
 import io.kaseb.server.website.model.dto.response.GetWebsiteResponseDto;
 import io.kaseb.server.website.model.dto.response.UpdateWebsiteConfigResponseDto;
 import io.kaseb.server.website.model.entities.WebsiteConfigEntity;
@@ -43,11 +43,18 @@ public class WebsiteService {
     private final WebsiteRepo websiteRepo;
     private final WebsiteConfigRepo websiteConfigRepo;
 
-    public GetWebsiteConfigResponseDto getWebsiteConfigs(String url, String id) throws WebsiteNotFoundException {
+    public GetWebsiteConfigsResponseDto getWebsiteConfigs(String url, String id) throws WebsiteNotFoundException {
         WebsiteEntity websiteEntity = websiteRepo.findByUrl(url).orElse(null);
         if (websiteEntity == null)
             websiteEntity = websiteRepo.findById(id).orElseThrow(WebsiteNotFoundException::new);
-        return new GetWebsiteConfigResponseDto(websiteEntity);
+        return new GetWebsiteConfigsResponseDto(getWebsiteConfigs(websiteEntity)
+                .stream().map(ConfigDto::new).collect(Collectors.toList()));
+    }
+
+    public List<WebsiteConfigEntity> getWebsiteConfigs(WebsiteEntity websiteEntity) {
+        if (websiteEntity == null)
+            return Collections.emptyList();
+        return websiteConfigRepo.findAllByWebsite(websiteEntity);
     }
 
     public UpdateWebsiteResponseDto updateWebsite(UpdateWebsiteRequestDto request, String id, UserEntity user)
@@ -82,8 +89,6 @@ public class WebsiteService {
         WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
-        if (!CollectionUtils.isEmpty(websiteEntity.getConfigs()))
-            websiteEntity.setConfigs(new ArrayList<>());
         if (CollectionUtils.isEmpty(request.getConfigValues()))
             return new CreateWebsiteConfigResponseDto();
         final List<ConfigDto> configDtos = new ArrayList<>(request.getConfigValues().size());
@@ -120,19 +125,20 @@ public class WebsiteService {
         return null;
     }
 
-    public GetWebsiteResponseDto getWebsites(String websiteId) throws WebsiteNotFoundException {
+    public GetWebsiteResponseDto getWebsite(String websiteId) throws WebsiteNotFoundException {
         final WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
-        return new GetWebsiteResponseDto(websiteEntity);
+        return new GetWebsiteResponseDto(websiteEntity, getWebsiteConfigs(websiteEntity));
     }
 
     public GetWebsitesResponseDto getWebsites(UserEntity user) {
-        final List<WebsiteEntity> websites = user.getWebsites();
+
+        final List<WebsiteEntity> websites = websiteRepo.findAllByUserAndDeletedIsFalse(user);
         List<BaseWebsiteDto> websiteDtoList;
         if (CollectionUtils.isEmpty(websites))
             websiteDtoList = Collections.emptyList();
         else
             websiteDtoList = websites.stream()
-                    .filter(i -> !i.isDeleted()).map(BaseWebsiteDto::new).collect(Collectors.toList());
+                    .map(BaseWebsiteDto::new).collect(Collectors.toList());
         return new GetWebsitesResponseDto(websiteDtoList);
     }
 
