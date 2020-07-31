@@ -36,14 +36,14 @@ public class WebsiteController {
     @ApiOperation("Get Websites")
     @GetMapping
     public ResponseEntity<GetWebsitesResponseDto> getWebsites() {
-        return ResponseEntity.ok(websiteService.getWebsites());
+        return ResponseEntity.ok(websiteService.getWebsites(requestContext.getUser()));
     }
 
     @ApiOperation("Get Website By Id")
     @GetMapping("/{websiteId}")
     public ResponseEntity<GetWebsiteResponseDto> getWebsites(
             @PathVariable("websiteId") String websiteId) throws ServiceException {
-        return ResponseEntity.ok(websiteService.getWebsite(websiteId));
+        return ResponseEntity.ok(websiteService.getWebsites(websiteId));
     }
 
     @PutMapping("/{id}")

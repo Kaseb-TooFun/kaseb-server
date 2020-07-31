@@ -53,6 +53,6 @@ public class UserService {
 
     public GetWebsitesResponseDto getWebsite(UserEntity user) throws UserNotFoundException {
         user = userRepo.findById(user.getId()).orElseThrow(UserNotFoundException::new);
-        return websiteService.getWebsite(user);
+        return websiteService.getWebsites(user);
     }
 }

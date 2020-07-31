@@ -1,6 +1,9 @@
 package io.kaseb.server.website.service;
 
-import io.kaseb.server.user.exceptions.*;
+import io.kaseb.server.user.exceptions.UnauthorizedAccessException;
+import io.kaseb.server.user.exceptions.WebsiteConfigNotFoundException;
+import io.kaseb.server.user.exceptions.WebsiteExistsException;
+import io.kaseb.server.user.exceptions.WebsiteNotFoundException;
 import io.kaseb.server.user.model.dao.WebsiteRepo;
 import io.kaseb.server.user.model.dto.BaseUserDto;
 import io.kaseb.server.user.model.dto.BaseWebsiteDto;
@@ -24,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,6 +65,7 @@ public class WebsiteService {
             websiteEntity.setTitle(title);
     }
 
+    @Transactional
     public Void deleteWebsite(String id, UserEntity user)
             throws WebsiteNotFoundException, UnauthorizedAccessException {
         WebsiteEntity websiteEntity = websiteRepo.findById(id).orElseThrow(WebsiteNotFoundException::new);
@@ -104,6 +109,7 @@ public class WebsiteService {
         return new UpdateWebsiteConfigResponseDto(websiteConfigEntity);
     }
 
+    @Transactional
     public Void deleteWebsiteConfig(String websiteId, String configId, UserEntity user)
             throws WebsiteConfigNotFoundException, UnauthorizedAccessException {
         WebsiteConfigEntity websiteConfigEntity =
@@ -114,25 +120,13 @@ public class WebsiteService {
         return null;
     }
 
-    public GetWebsiteResponseDto getWebsite(String websiteId) throws WebsiteNotFoundException {
+    public GetWebsiteResponseDto getWebsites(String websiteId) throws WebsiteNotFoundException {
         final WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
         return new GetWebsiteResponseDto(websiteEntity);
     }
 
-    public GetWebsitesResponseDto getWebsite(UserEntity user) throws UserNotFoundException {
+    public GetWebsitesResponseDto getWebsites(UserEntity user) {
         final List<WebsiteEntity> websites = user.getWebsites();
-        List<BaseWebsiteDto> websiteDtoList;
-        if (CollectionUtils.isEmpty(websites))
-            websiteDtoList = Collections.emptyList();
-        else
-            websiteDtoList = websites.stream()
-                    .filter(i -> !i.isDeleted()).map(BaseWebsiteDto::new).collect(Collectors.toList());
-        return new GetWebsitesResponseDto(websiteDtoList);
-    }
-
-    public GetWebsitesResponseDto getWebsites() {
-
-        final List<WebsiteEntity> websites = websiteRepo.findAll();
         List<BaseWebsiteDto> websiteDtoList;
         if (CollectionUtils.isEmpty(websites))
             websiteDtoList = Collections.emptyList();

@@ -29,7 +29,7 @@ public class WebsiteEntity {
     private String title;
     @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean deleted;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "website")
+    @OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER, mappedBy = "website")
     private List<WebsiteConfigEntity> configs;
 
     public WebsiteEntity(UserEntity user, String url, String title) {
