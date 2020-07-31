@@ -72,11 +72,12 @@ public class AuthenticateService {
 
     public SignupResponseDto signup(SignupRequestDto request, HttpServletResponse response) throws ServiceException {
         final String hashedPassword = hash(request.getPassword());
-        final UserEntity user = userService.signup(request.getUsername(), hashedPassword);
-        final LoginRequestDto loginRequestDto = new LoginRequestDto(request.getUsername(), request.getPassword());
-        this.login(loginRequestDto, response);
-        final BaseUserDto userDto = new BaseUserDto(user);
-        return new SignupResponseDto(userDto);
+        userService.signup(request.getUsername(), hashedPassword);
+        final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
+        final Pair<SessionEntity, String> sessionPair = createSession(userEntity);
+        final BaseUserDto userDto = new BaseUserDto(userEntity);
+        setAuthenticationInfoInResponse(response, sessionPair);
+        return new SignupResponseDto(userDto, sessionPair.getSecond());
     }
 
     private String hash(String value) {
