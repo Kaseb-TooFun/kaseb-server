@@ -8,6 +8,9 @@ import io.kaseb.server.authenticate.model.dto.response.LoginResponseDto;
 import io.kaseb.server.authenticate.model.dto.response.SignupResponseDto;
 import io.kaseb.server.authenticate.model.entities.SessionEntity;
 import io.kaseb.server.exceptions.ServiceException;
+import io.kaseb.server.operator.model.entities.OperatorEntity;
+import io.kaseb.server.operator.service.OperatorService;
+import io.kaseb.server.user.exceptions.DuplicateUsernameException;
 import io.kaseb.server.user.model.dto.BaseUserDto;
 import io.kaseb.server.user.model.entities.UserEntity;
 import io.kaseb.server.user.service.UserService;
@@ -34,20 +37,29 @@ public class AuthenticateService {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String AUTHORIZATION_HEADER_BASE = "bearer ";
     private final UserService userService;
+    private final OperatorService operatorService;
     private final SessionRepo sessionRepo;
 
     public LoginResponseDto login(LoginRequestDto request, HttpServletResponse response) throws ServiceException {
         final String hashedPassword = hash(request.getPassword());
-        final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
-        final Pair<SessionEntity, String> sessionPair = createSession(userEntity);
-        final BaseUserDto userDto = new BaseUserDto(userEntity);
-        setAuthenticationInfoInResponse(response, sessionPair);
+        final Pair<SessionEntity, String> sessionPair;
+        final BaseUserDto userDto;
+        if (request.isOperator()) {
+            final OperatorEntity operatorEntity = operatorService.login(request.getUsername(), hashedPassword);
+            sessionPair = createSession(operatorEntity);
+            userDto = new BaseUserDto(operatorEntity);
+        } else {
+            final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
+            sessionPair = createSession(userEntity);
+            userDto = new BaseUserDto(userEntity);
+        }
+        setAuthenticationInfoInResponse(response, sessionPair.getSecond());
         return new LoginResponseDto(userDto, sessionPair.getSecond());
     }
 
-    private void setAuthenticationInfoInResponse(HttpServletResponse response, Pair<SessionEntity, String> sessionPair) {
-        response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + sessionPair.getSecond());
-        response.addCookie(createCookie(sessionPair.getSecond()));
+    private void setAuthenticationInfoInResponse(HttpServletResponse response, String plainToken) {
+        response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + plainToken);
+        response.addCookie(createCookie(plainToken));
     }
 
     private Cookie createCookie(String plainToken) {
@@ -64,6 +76,12 @@ public class AuthenticateService {
         return Pair.of(sessionRepo.save(sessionEntity), plainToken);
     }
 
+    private Pair<SessionEntity, String> createSession(OperatorEntity operatorEntity) {
+        final String plainToken = createRandomToken();
+        SessionEntity sessionEntity = new SessionEntity(hash(plainToken), operatorEntity);
+        return Pair.of(sessionRepo.save(sessionEntity), plainToken);
+    }
+
     private String createRandomToken() {
         final byte[] randomBytes = new byte[100];
         new Random(System.currentTimeMillis()).nextBytes(randomBytes);
@@ -72,12 +90,28 @@ public class AuthenticateService {
 
     public SignupResponseDto signup(SignupRequestDto request, HttpServletResponse response) throws ServiceException {
         final String hashedPassword = hash(request.getPassword());
-        userService.signup(request.getUsername(), hashedPassword);
-        final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
-        final Pair<SessionEntity, String> sessionPair = createSession(userEntity);
-        final BaseUserDto userDto = new BaseUserDto(userEntity);
-        setAuthenticationInfoInResponse(response, sessionPair);
+        signup(request, hashedPassword);
+        final Pair<?, String> sessionPair;
+        final BaseUserDto userDto;
+        if (request.isOperator()) {
+            final OperatorEntity operatorEntity = operatorService.login(request.getUsername(), hashedPassword);
+            sessionPair = createSession(operatorEntity);
+            userDto = new BaseUserDto(operatorEntity);
+        } else {
+            final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
+            sessionPair = createSession(userEntity);
+            userDto = new BaseUserDto(userEntity);
+
+        }
+        setAuthenticationInfoInResponse(response, sessionPair.getSecond());
         return new SignupResponseDto(userDto, sessionPair.getSecond());
+    }
+
+    private void signup(SignupRequestDto request, String hashedPassword) throws DuplicateUsernameException {
+        if (request.isOperator())
+            operatorService.signup(request.getUsername(), hashedPassword);
+        else
+            userService.signup(request.getUsername(), hashedPassword);
     }
 
     private String hash(String value) {
@@ -92,7 +126,7 @@ public class AuthenticateService {
         return "";
     }
 
-    public UserEntity authenticate(HttpServletRequest request) throws AuthenticationException {
+    public SessionEntity authenticate(HttpServletRequest request) throws AuthenticationException {
         final String plainToken = extractPlainToken(request);
         return authenticate(plainToken);
     }
@@ -125,11 +159,11 @@ public class AuthenticateService {
         return request == null ? null : request.getHeader(AUTHORIZATION_HEADER);
     }
 
-    private UserEntity authenticate(String plainToken) throws AuthenticationException {
+    private SessionEntity authenticate(String plainToken) throws AuthenticationException {
         final SessionEntity sessionEntity = sessionRepo.findByToken(hash(plainToken))
                 .orElseThrow(AuthenticationException::new);
         sessionEntity.setLastActivityDate(new Date());
         sessionRepo.saveAndFlush(sessionEntity);
-        return sessionEntity.getUser();
+        return sessionEntity;
     }
 }

@@ -1,5 +1,6 @@
 package io.kaseb.server.base;
 
+import io.kaseb.server.operator.model.entities.OperatorEntity;
 import io.kaseb.server.user.model.entities.UserEntity;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
@@ -18,5 +19,6 @@ import java.util.UUID;
 public class RequestContext {
     private String requestId = UUID.randomUUID().toString();
     private UserEntity user;
+    private OperatorEntity operator;
     private String clientIp;
 }

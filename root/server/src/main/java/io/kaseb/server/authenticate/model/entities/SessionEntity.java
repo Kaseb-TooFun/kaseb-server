@@ -1,5 +1,6 @@
 package io.kaseb.server.authenticate.model.entities;
 
+import io.kaseb.server.operator.model.entities.OperatorEntity;
 import io.kaseb.server.user.model.entities.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,9 @@ public class SessionEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    @ManyToOne
+    @JoinColumn(name = "operator_id")
+    private OperatorEntity operator;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
     @CreationTimestamp
@@ -37,5 +41,10 @@ public class SessionEntity {
     public SessionEntity(String token, UserEntity user) {
         this.token = token;
         this.user = user;
+    }
+
+    public SessionEntity(String token, OperatorEntity operator) {
+        this.token = token;
+        this.operator = operator;
     }
 }
