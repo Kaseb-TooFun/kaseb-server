@@ -24,11 +24,9 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Random;
+import static io.kaseb.server.util.HashUtils.hash;
 
 @Service
 @RequiredArgsConstructor
@@ -112,18 +110,6 @@ public class AuthenticateService {
             operatorService.signup(request.getUsername(), hashedPassword);
         else
             userService.signup(request.getUsername(), hashedPassword);
-    }
-
-    private String hash(String value) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(value.getBytes(StandardCharsets.UTF_8));
-            byte[] md5Bytes = md.digest();
-            return Base64Utils.encodeToString(md5Bytes);
-        } catch (NoSuchAlgorithmException e) {
-            logger.error("no such algorithm {} base64", "MD5", e);
-        }
-        return "";
     }
 
     public SessionEntity authenticate(HttpServletRequest request) throws AuthenticationException {

@@ -22,6 +22,8 @@ public class OperatorEntity {
     private String username;
     @Column(name = "hashed_password")
     private String hashedPassword;
+    @Column(name = "activated",columnDefinition = "boolean default false")
+    private boolean activated;
 
     public OperatorEntity(String username, String hashedPassword) {
         this.username = username;

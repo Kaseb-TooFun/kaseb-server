@@ -34,7 +34,7 @@ public class RestApiAuthenticationInterceptor implements HandlerInterceptor {
             Method method = ((HandlerMethod) handler).getMethod();
             if (!method.isAnnotationPresent(IgnoreAuthentication.class)) {
                 AuthenticationRequired annotation = method.getAnnotation(AuthenticationRequired.class);
-                authenticate(request, annotation == null ? null : annotation.getRole());
+                authenticate(request, annotation == null ? null : annotation.role());
             }
         }
         return true;
