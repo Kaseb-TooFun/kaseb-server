@@ -6,7 +6,7 @@ import io.kaseb.server.exceptions.ServiceException;
 import io.kaseb.server.website.model.dto.request.CreateWebsiteConfigRequestDto;
 import io.kaseb.server.website.model.dto.request.UpdateWebsiteConfigRequestDto;
 import io.kaseb.server.website.model.dto.response.CreateWebsiteConfigResponseDto;
-import io.kaseb.server.website.model.dto.response.GetWebsiteConfigResponseDto;
+import io.kaseb.server.website.model.dto.response.GetWebsiteConfigsResponseDto;
 import io.kaseb.server.website.model.dto.response.UpdateWebsiteConfigResponseDto;
 import io.kaseb.server.website.service.WebsiteService;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +27,7 @@ public class WebsiteConfigController {
     @ApiOperation("Get Website Configs")
     @GetMapping
     @IgnoreAuthentication
-    public ResponseEntity<GetWebsiteConfigResponseDto> getWebsiteConfig(
+    public ResponseEntity<GetWebsiteConfigsResponseDto> getWebsiteConfig(
             @PathVariable("websiteId") String websiteId) throws ServiceException {
         return ResponseEntity.ok(websiteService.getWebsiteConfigs(null, websiteId));
     }
