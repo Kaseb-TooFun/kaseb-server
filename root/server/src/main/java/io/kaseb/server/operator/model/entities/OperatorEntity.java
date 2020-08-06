@@ -26,9 +26,10 @@ public class OperatorEntity {
     @Column(name = "activated", columnDefinition = "boolean default false")
     private boolean activated;
 
-    public OperatorEntity(String username, String hashedPassword) {
+    public OperatorEntity(String username, String hashedPassword, boolean activated) {
         this.username = username;
         this.hashedPassword = hashedPassword;
+        this.activated = activated;
     }
 
     @JsonIgnore

@@ -38,7 +38,7 @@ public class OperatorService {
         if (optionalOperatorEntity.isPresent()) {
             throw new DuplicateUsernameException();
         }
-        OperatorEntity operatorEntity = new OperatorEntity(username, hashedPassword);
+        OperatorEntity operatorEntity = new OperatorEntity(username, hashedPassword, false);
         return operatorRepo.save(operatorEntity);
     }
 
@@ -57,7 +57,7 @@ public class OperatorService {
         logger.info("trying to create sysadmin user");
         final String sysadminPassword = messageSource.getMessage("SYSADMIN_PASSWORD", null, Locale.US);
         OperatorEntity operatorEntity =
-                new OperatorEntity(Constants.SYSADMIN_USERNAME, HashUtils.hash(sysadminPassword));
+                new OperatorEntity(Constants.SYSADMIN_USERNAME, HashUtils.hash(sysadminPassword), true);
         operatorRepo.saveAndFlush(operatorEntity);
     }
 
