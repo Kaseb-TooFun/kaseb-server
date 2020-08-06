@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Random;
+
 import static io.kaseb.server.util.HashUtils.hash;
 
 @Service
@@ -106,10 +107,13 @@ public class AuthenticateService {
     }
 
     private void signup(SignupRequestDto request, String hashedPassword) throws DuplicateUsernameException {
-        if (request.isOperator())
-            operatorService.signup(request.getUsername(), hashedPassword);
-        else
-            userService.signup(request.getUsername(), hashedPassword);
+        if (request.isOperator()) {
+            OperatorEntity operatorEntity = operatorService.signup(request.getUsername(), hashedPassword);
+            logger.info("operator with id :{} signed up successfully", operatorEntity.getId());
+        } else {
+            UserEntity userEntity = userService.signup(request.getUsername(), hashedPassword);
+            logger.info("user with id :{} signed up successfully", userEntity.getId());
+        }
     }
 
     public SessionEntity authenticate(HttpServletRequest request) throws AuthenticationException {
