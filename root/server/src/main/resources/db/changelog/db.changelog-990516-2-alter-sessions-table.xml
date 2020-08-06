@@ -1,0 +1,25 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="Seyyed Mahdiyar Zerehpoush" id="db.changelog-990516-2-alter-sessions-table.xml">
+        <sql>
+            alter table sessions alter column id type char(36) using id::char(36);
+            alter table users alter column id type char(36) using id::char(36);
+            alter table website alter column id type char(36) using id::char(36);
+            alter table website alter column user_id type char(36) using user_id::char(36);
+            alter table sessions alter column user_id type char(36) using user_id::char(36);
+            alter table website_config alter column id type char(36) using id::char(36);
+            alter table website_config alter column website_id type char(36) using website_id::char(36);
+
+            alter table sessions
+            add operator_id char(36);
+
+            alter table sessions
+            add constraint sessions_operators_id_fk
+            foreign key (operator_id) references operators;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

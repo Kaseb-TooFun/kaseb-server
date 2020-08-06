@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="Seyyed Mahdiyar Zerehpoush" id="db.changelog-990516-3-create-modules-table.xml">
+        <sql>
+            create table modules
+            (
+            id char(36) not null,
+            link varchar not null,
+            creation_date timestamp not null,
+            operator_id char(36)
+            constraint modules_operators_id_fk
+            references operators (id)
+            );
+
+            create unique index modules_id_uindex
+            on modules (id);
+
+            alter table modules
+            add constraint modules_pk
+            primary key (id);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

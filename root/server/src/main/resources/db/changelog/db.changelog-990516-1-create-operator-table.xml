@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="Seyyed Mahdiyar Zerehpoush" id="db.changelog-990516-1-create-operator-table.xml">
+        <sql>
+            create table operators
+            (
+            id char(36) not null,
+            username varchar not null,
+            hashed_password varchar,
+            activated boolean default false
+            );
+
+            create unique index operators_id_uindex
+            on operators (id);
+
+            create unique index operators_username_uindex
+            on operators (username);
+
+            alter table operators
+            add constraint operators_pk
+            primary key (id);
+
+
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -4,4 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <include file="db.changelog-990519-0-init-db.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-990516-1-create-operator-table.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-990516-2-alter-sessions-table.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-990516-3-create-modules-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
