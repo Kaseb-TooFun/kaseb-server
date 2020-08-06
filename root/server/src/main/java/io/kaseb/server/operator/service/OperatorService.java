@@ -1,8 +1,15 @@
 package io.kaseb.server.operator.service;
 
+import io.kaseb.server.authenticate.exceptions.ForbiddenException;
+import io.kaseb.server.base.Constants;
 import io.kaseb.server.exceptions.ServiceException;
+import io.kaseb.server.module.service.ModuleService;
+import io.kaseb.server.operator.exceptions.OperatorIsNotActiveException;
+import io.kaseb.server.operator.exceptions.OperatorNotFoundException;
 import io.kaseb.server.operator.model.dao.OperatorRepo;
+import io.kaseb.server.operator.model.dto.BaseModuleDto;
 import io.kaseb.server.operator.model.dto.OperatorDto;
+import io.kaseb.server.operator.model.dto.request.CreateModuleRequestDto;
 import io.kaseb.server.operator.model.entities.OperatorEntity;
 import io.kaseb.server.user.exceptions.DuplicateUsernameException;
 import io.kaseb.server.user.exceptions.IncorrectPasswordException;
@@ -15,14 +22,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OperatorService {
     private final OperatorRepo operatorRepo;
-    private static final String SYSADMIN_USERNAME = "sysadmin";
     private final MessageSource messageSource;
+    private final ModuleService moduleService;
 
     public OperatorEntity signup(String username, String hashedPassword) throws DuplicateUsernameException {
         logger.info("trying to signup operator with username : {}", username);
@@ -44,11 +52,12 @@ public class OperatorService {
     }
 
     public void initializeSysadmin() {
-        if (operatorRepo.findByUsername(SYSADMIN_USERNAME).isPresent())
+        if (operatorRepo.findByUsername(Constants.SYSADMIN_USERNAME).isPresent())
             return;
         logger.info("trying to create sysadmin user");
         final String sysadminPassword = messageSource.getMessage("SYSADMIN_PASSWORD", null, Locale.US);
-        OperatorEntity operatorEntity = new OperatorEntity(SYSADMIN_USERNAME, HashUtils.hash(sysadminPassword));
+        OperatorEntity operatorEntity =
+                new OperatorEntity(Constants.SYSADMIN_USERNAME, HashUtils.hash(sysadminPassword));
         operatorRepo.saveAndFlush(operatorEntity);
     }
 
@@ -56,6 +65,30 @@ public class OperatorService {
         final List<OperatorEntity> operatorEntities = operatorRepo.findAll();
         if (CollectionUtils.isEmpty(operatorEntities))
             return Collections.emptyList();
-        return operatorEntities.stream().map(OperatorDto::new).collect(Collecots.toList());
+        return operatorEntities.stream().map(OperatorDto::new).collect(Collectors.toList());
+    }
+
+
+    public OperatorEntity findById(String id) throws OperatorNotFoundException {
+        return operatorRepo.findById(id).orElseThrow(OperatorNotFoundException::new);
+    }
+
+    public Void activateOperator(OperatorEntity operator, String operatorId, boolean activate)
+            throws ForbiddenException, OperatorNotFoundException {
+        if (!operator.isSysadmin())
+            throw new ForbiddenException();
+        final OperatorEntity operatorEntity = findById(operatorId);
+        if (operatorEntity.isSysadmin())
+            throw new ForbiddenException();
+        operatorEntity.updateActivationStatus(activate);
+        operatorRepo.saveAndFlush(operatorEntity);
+        return null;
+    }
+
+    public BaseModuleDto createModule(OperatorEntity operator, CreateModuleRequestDto requestDto)
+            throws OperatorIsNotActiveException {
+        if (!operator.isActivated())
+            throw new OperatorIsNotActiveException();
+        return moduleService.createModule(operator, requestDto);
     }
 }

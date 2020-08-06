@@ -1,12 +1,12 @@
 package io.kaseb.server.operator.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.kaseb.server.base.Constants;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,6 +14,7 @@ import java.util.UUID;
 @Table(name = "operators")
 @Getter
 @NoArgsConstructor
+@Slf4j
 public class OperatorEntity {
     @Id
     @Column(name = "id", nullable = false, unique = true)
@@ -22,12 +23,18 @@ public class OperatorEntity {
     private String username;
     @Column(name = "hashed_password")
     private String hashedPassword;
-    @Column(name = "activated",columnDefinition = "boolean default false")
+    @Column(name = "activated", columnDefinition = "boolean default false")
     private boolean activated;
 
     public OperatorEntity(String username, String hashedPassword) {
         this.username = username;
         this.hashedPassword = hashedPassword;
+    }
+
+    @JsonIgnore
+    @Transient
+    public boolean isSysadmin() {
+        return Objects.equals(Constants.SYSADMIN_USERNAME, this.getUsername());
     }
 
     @Override
@@ -41,5 +48,11 @@ public class OperatorEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public OperatorEntity updateActivationStatus(boolean activated) {
+        logger.info("updating operator activation status . [operatorId : {}, active : {}]", this.id, activated);
+        this.activated = activated;
+        return this;
     }
 }
