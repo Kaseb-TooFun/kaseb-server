@@ -24,6 +24,7 @@ import io.kaseb.server.website.model.dto.response.UpdateWebsiteConfigResponseDto
 import io.kaseb.server.website.model.entities.WebsiteConfigEntity;
 import io.kaseb.server.website.model.entities.WebsiteEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -39,16 +40,24 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WebsiteService {
     private final WebsiteRepo websiteRepo;
     private final WebsiteConfigRepo websiteConfigRepo;
 
+
     public GetWebsiteConfigsResponseDto getWebsiteConfigs(String url, String id) throws WebsiteNotFoundException {
         WebsiteEntity websiteEntity = websiteRepo.findByUrl(url).orElse(null);
-        if (websiteEntity == null)
-            websiteEntity = websiteRepo.findById(id).orElseThrow(WebsiteNotFoundException::new);
+        if (websiteEntity == null) {
+            websiteEntity = findById(id);
+        }
         return new GetWebsiteConfigsResponseDto(getWebsiteConfigs(websiteEntity)
                 .stream().map(ConfigDto::new).collect(Collectors.toList()));
+    }
+
+    public WebsiteEntity findById(String websiteId) throws WebsiteNotFoundException {
+        logger.info("trying to find website with id : {}", websiteId);
+        return websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
     }
 
     public List<WebsiteConfigEntity> getWebsiteConfigs(WebsiteEntity websiteEntity) {
@@ -59,7 +68,7 @@ public class WebsiteService {
 
     public UpdateWebsiteResponseDto updateWebsite(UpdateWebsiteRequestDto request, String id, UserEntity user)
             throws WebsiteNotFoundException, UnauthorizedAccessException {
-        WebsiteEntity websiteEntity = websiteRepo.findById(id).orElseThrow(WebsiteNotFoundException::new);
+        WebsiteEntity websiteEntity = findById(id);
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
         updateWebsite(websiteEntity, request.getTitle());
@@ -75,7 +84,7 @@ public class WebsiteService {
     @Transactional
     public Void deleteWebsite(String id, UserEntity user)
             throws WebsiteNotFoundException, UnauthorizedAccessException {
-        WebsiteEntity websiteEntity = websiteRepo.findById(id).orElseThrow(WebsiteNotFoundException::new);
+        WebsiteEntity websiteEntity = findById(id);
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
         websiteEntity.setDeleted(true);
@@ -86,25 +95,26 @@ public class WebsiteService {
     public CreateWebsiteConfigResponseDto createWebsiteConfig(
             String websiteId, CreateWebsiteConfigRequestDto request, UserEntity user)
             throws WebsiteNotFoundException, UnauthorizedAccessException {
-        WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
+        WebsiteEntity websiteEntity = findById(websiteId);
         if (!user.equals(websiteEntity.getUser()))
             throw new UnauthorizedAccessException();
         if (CollectionUtils.isEmpty(request.getConfigValues()))
             return new CreateWebsiteConfigResponseDto();
-        final List<ConfigDto> configDtos = new ArrayList<>(request.getConfigValues().size());
+        final List<ConfigDto> configDtoList = new ArrayList<>(request.getConfigValues().size());
         for (String configValue : request.getConfigValues()) {
             WebsiteConfigEntity websiteConfigEntity = new WebsiteConfigEntity(websiteEntity, configValue);
             websiteConfigEntity = websiteConfigRepo.save(websiteConfigEntity);
             ConfigDto configDto = new ConfigDto(websiteConfigEntity);
-            configDtos.add(configDto);
+            configDtoList.add(configDto);
         }
-        return new CreateWebsiteConfigResponseDto(configDtos);
+        return new CreateWebsiteConfigResponseDto(configDtoList);
 
     }
 
     public UpdateWebsiteConfigResponseDto updateWebsiteConfig(
             UpdateWebsiteConfigRequestDto request, String websiteId, String configId, UserEntity user)
             throws UnauthorizedAccessException, WebsiteConfigNotFoundException {
+        logger.info("trying to update websiteConfig with [websiteId : {}, configId : {}]", websiteId, configId);
         WebsiteConfigEntity websiteConfigEntity =
                 websiteConfigRepo.findById(configId).orElseThrow(WebsiteConfigNotFoundException::new);
         if (!Objects.equals(websiteConfigEntity.getWebsite().getUser(), user))
@@ -117,6 +127,7 @@ public class WebsiteService {
     @Transactional
     public Void deleteWebsiteConfig(String websiteId, String configId, UserEntity user)
             throws WebsiteConfigNotFoundException, UnauthorizedAccessException {
+        logger.info("trying to delete websiteConfig with [websiteId : {}, configId : {}]", websiteId, configId);
         WebsiteConfigEntity websiteConfigEntity =
                 websiteConfigRepo.findById(configId).orElseThrow(WebsiteConfigNotFoundException::new);
         if (!Objects.equals(websiteConfigEntity.getWebsite().getUser(), user))
@@ -126,7 +137,7 @@ public class WebsiteService {
     }
 
     public GetWebsiteResponseDto getWebsite(String websiteId) throws WebsiteNotFoundException {
-        final WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
+        final WebsiteEntity websiteEntity = findById(websiteId);
         return new GetWebsiteResponseDto(websiteEntity, getWebsiteConfigs(websiteEntity));
     }
 

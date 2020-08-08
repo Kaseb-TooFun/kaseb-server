@@ -44,7 +44,7 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("UserEntity{");
+        final StringBuilder sb = new StringBuilder("UserEntity{");
         sb.append("id='").append(id).append('\'');
         sb.append(", username='").append(username).append('\'');
         sb.append('}');

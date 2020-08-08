@@ -50,7 +50,7 @@ public class WebsiteEntity {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("WebsiteEntity{");
+        final StringBuilder sb = new StringBuilder("WebsiteEntity{");
         sb.append("id='").append(id).append('\'');
         sb.append(", url='").append(url).append('\'');
         sb.append(", title='").append(title).append('\'');

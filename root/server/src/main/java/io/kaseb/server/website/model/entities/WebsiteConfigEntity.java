@@ -44,7 +44,7 @@ public class WebsiteConfigEntity {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("WebsiteConfigEntity{");
+        final StringBuilder sb = new StringBuilder("WebsiteConfigEntity{");
         sb.append("id='").append(id).append('\'');
         sb.append(", configValue='").append(configValue).append('\'');
         sb.append('}');

@@ -5,6 +5,8 @@ import io.kaseb.server.module.model.entities.ModuleEntity;
 import io.kaseb.server.operator.model.dto.BaseModuleDto;
 import io.kaseb.server.operator.model.dto.request.CreateModuleRequestDto;
 import io.kaseb.server.operator.model.entities.OperatorEntity;
+import io.kaseb.server.user.exceptions.WebsiteNotFoundException;
+import io.kaseb.server.website.service.WebsiteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class ModuleService {
     private static volatile String latestModuleLink;
     private final ModuleRepo moduleRepo;
+    private final WebsiteService websiteService;
 
     private static synchronized void updateLatestModuleLink(String link) {
         latestModuleLink = link;
@@ -56,5 +59,10 @@ public class ModuleService {
         if (CollectionUtils.isEmpty(moduleEntities))
             return Collections.emptyList();
         return moduleEntities.stream().map(BaseModuleDto::new).collect(Collectors.toList());
+    }
+
+    public String getLatestModuleLink(String websiteId) throws WebsiteNotFoundException {
+        websiteService.findById(websiteId);
+        return getLatestModuleLink();
     }
 }
