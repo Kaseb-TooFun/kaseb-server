@@ -22,6 +22,8 @@ public class ModuleEntity {
     private String id = UUID.randomUUID().toString();
     @Column(name = "link", columnDefinition = "varchar(500)")
     private String link;
+    @Column(name = "style", columnDefinition = "varchar(500)")
+    private String style;
     @Column(name = "creation_date")
     @CreationTimestamp
     private Date creationDate;
@@ -29,8 +31,9 @@ public class ModuleEntity {
     @JoinColumn(name = "operator_id")
     private OperatorEntity operator;
 
-    public ModuleEntity(String link, OperatorEntity operatorEntity) {
+    public ModuleEntity(String link, String style, OperatorEntity operatorEntity) {
         this.link = link;
+        this.style = style;
         this.operator = operatorEntity;
     }
 }

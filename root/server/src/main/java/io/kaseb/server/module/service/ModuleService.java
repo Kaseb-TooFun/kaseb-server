@@ -1,6 +1,7 @@
 package io.kaseb.server.module.service;
 
 import io.kaseb.server.module.model.dao.ModuleRepo;
+import io.kaseb.server.module.model.dto.response.LatestModuleDto;
 import io.kaseb.server.module.model.entities.ModuleEntity;
 import io.kaseb.server.operator.model.dto.BaseModuleDto;
 import io.kaseb.server.operator.model.dto.request.CreateModuleRequestDto;
@@ -27,17 +28,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ModuleService {
     private static volatile String latestModuleLink;
+    private static volatile String latestStyleLink;
     private final ModuleRepo moduleRepo;
     private final WebsiteService websiteService;
 
-    private static synchronized void updateLatestModuleLink(String link) {
-        latestModuleLink = link;
+    private static synchronized void updateLatestModuleLink(String moduleLink, String styleLink) {
+        latestModuleLink = moduleLink;
+        latestStyleLink = styleLink;
     }
 
     public BaseModuleDto createModule(OperatorEntity operator, CreateModuleRequestDto requestDto) {
         logger.info("trying to create module with operator : {} ,request : {}", operator.getId(), requestDto);
-        ModuleEntity moduleEntity = new ModuleEntity(requestDto.getModuleLink(), operator);
-        updateLatestModuleLink(requestDto.getModuleLink());
+        ModuleEntity moduleEntity = new ModuleEntity(requestDto.getModuleLink(), requestDto.getStyleLink(), operator);
+        updateLatestModuleLink(requestDto.getModuleLink(), requestDto.getStyleLink());
         return new BaseModuleDto(moduleRepo.saveAndFlush(moduleEntity));
     }
 
@@ -47,11 +50,12 @@ public class ModuleService {
         Optional<ModuleEntity> optionalModuleEntity = moduleRepo.findFirstByOrderByCreationDateDesc();
         if (optionalModuleEntity.isEmpty())
             return;
-        updateLatestModuleLink(optionalModuleEntity.get().getLink());
+        final ModuleEntity moduleEntity = optionalModuleEntity.get();
+        updateLatestModuleLink(moduleEntity.getLink(), moduleEntity.getStyle());
     }
 
-    public String getLatestModuleLink() {
-        return latestModuleLink;
+    public LatestModuleDto getLatestModuleLink() {
+        return new LatestModuleDto(latestModuleLink, latestStyleLink);
     }
 
     public List<BaseModuleDto> getModules() {
@@ -61,7 +65,7 @@ public class ModuleService {
         return moduleEntities.stream().map(BaseModuleDto::new).collect(Collectors.toList());
     }
 
-    public String getLatestModuleLink(String websiteId) throws WebsiteNotFoundException {
+    public LatestModuleDto getLatestModuleLink(String websiteId) throws WebsiteNotFoundException {
         websiteService.findById(websiteId);
         return getLatestModuleLink();
     }

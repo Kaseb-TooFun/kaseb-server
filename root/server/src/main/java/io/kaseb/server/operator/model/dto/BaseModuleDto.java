@@ -10,6 +10,7 @@ import lombok.Data;
 public class BaseModuleDto {
     private String id;
     private String link;
+    private String style;
     private Long creationDateTimestamp;
 
     public BaseModuleDto(ModuleEntity moduleEntity) {
@@ -17,6 +18,7 @@ public class BaseModuleDto {
             return;
         this.id = moduleEntity.getId();
         this.link = moduleEntity.getLink();
+        this.style = moduleEntity.getStyle();
         this.creationDateTimestamp = moduleEntity.getCreationDate().getTime();
     }
 }
