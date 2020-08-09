@@ -1,6 +1,8 @@
 package io.kaseb.server.config;
 
+import io.kaseb.server.authenticate.exceptions.AdminAuthenticationException;
 import io.kaseb.server.authenticate.exceptions.AuthenticationException;
+import io.kaseb.server.authenticate.exceptions.OperatorAuthenticationException;
 import io.kaseb.server.authenticate.model.annotations.AuthenticationRequired;
 import io.kaseb.server.authenticate.model.annotations.IgnoreAuthentication;
 import io.kaseb.server.authenticate.model.entities.SessionEntity;
@@ -40,15 +42,16 @@ public class RestApiAuthenticationInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private void authenticate(HttpServletRequest request, Role role) throws AuthenticationException {
+    private void authenticate(HttpServletRequest request, Role role)
+            throws AuthenticationException, AdminAuthenticationException, OperatorAuthenticationException {
         final SessionEntity sessionEntity = authenticateService.authenticate(request);
         if (Role.ADMIN.equals(role)) {
             if (sessionEntity.getUser() == null)
-                throw new AuthenticationException();
+                throw new AdminAuthenticationException();
             requestContext.setUser(sessionEntity.getUser());
         } else if (Role.OPERATOR.equals(role)) {
             if (sessionEntity.getOperator() == null)
-                throw new AuthenticationException();
+                throw new OperatorAuthenticationException();
             requestContext.setOperator(sessionEntity.getOperator());
         } else {
             requestContext.setOperator(sessionEntity.getOperator());
