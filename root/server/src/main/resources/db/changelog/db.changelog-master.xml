@@ -7,4 +7,5 @@
     <include file="db.changelog-990516-1-create-operator-table.xml" relativeToChangelogFile="true"/>
     <include file="db.changelog-990516-2-alter-sessions-table.xml" relativeToChangelogFile="true"/>
     <include file="db.changelog-990516-3-create-modules-table.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-990519-1-alter-modules-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
