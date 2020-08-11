@@ -34,7 +34,7 @@ import static io.kaseb.server.util.HashUtils.hash;
 @Slf4j
 public class AuthenticateService {
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String AUTHORIZATION_HEADER_BASE = "bearer ";
+    private static final String AUTHORIZATION_HEADER_BASE = "Bearer ";
     private final UserService userService;
     private final OperatorService operatorService;
     private final SessionRepo sessionRepo;
@@ -125,7 +125,9 @@ public class AuthenticateService {
         logger.info("trying to extract plain token from request");
         String bearerTokenFromHeader = extractTokenFromHeader(request);
         if (bearerTokenFromHeader != null && !StringUtils.isEmpty(bearerTokenFromHeader))
-            return bearerTokenFromHeader.replace(AUTHORIZATION_HEADER_BASE, "");
+            return bearerTokenFromHeader
+                    .replace(AUTHORIZATION_HEADER_BASE, "")
+                    .replace(AUTHORIZATION_HEADER_BASE.toLowerCase(), "");
         logger.info("request does not have authorization header");
         String bearerTokenFromCookie = extractTokenFromCookie(request);
         if (bearerTokenFromCookie != null && !StringUtils.isEmpty(bearerTokenFromCookie))

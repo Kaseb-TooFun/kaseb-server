@@ -19,6 +19,8 @@ public enum ServiceExceptions {
     FORBIDDEN(1009, "forbidden"),
     OPERATOR_NOT_FOUND(1010, "operator_not_found"),
     OPERATOR_NOT_ACTIVATED(1011, "operator_not_activated"),
+    ADMIN_AUTH_REQUIRED(1012, "admin_auth_required"),
+    OPERATOR_AUTH_REQUIRED(1013, "operator_auth_required"),
     ;
 
 
