@@ -64,6 +64,7 @@ nl-deploy:
   stage: deploy
   script:
     - whoami
+    - sudo docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - sudo docker-compose -f /docker-compose.yml pull server
     - sudo docker-compose -f /docker-compose.yml up -d
 #  - echo -e "$ARVAN_CLI_TOKEN\n"
