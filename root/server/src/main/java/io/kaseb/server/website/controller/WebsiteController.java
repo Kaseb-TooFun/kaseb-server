@@ -28,8 +28,7 @@ public class WebsiteController {
 
     @ApiOperation("Create Website")
     @PostMapping
-    public ResponseEntity<RegisterWebsiteResponseDto> createWebsite(@RequestBody RegisterWebsiteRequestDto request)
-            throws ServiceException {
+    public ResponseEntity<RegisterWebsiteResponseDto> createWebsite(@RequestBody RegisterWebsiteRequestDto request) {
         return ResponseEntity.ok(websiteService.registerWebsite(request, requestContext.getUser()));
     }
 

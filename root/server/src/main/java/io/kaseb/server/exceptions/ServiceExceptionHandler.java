@@ -1,8 +1,10 @@
 package io.kaseb.server.exceptions;
 
+import io.kaseb.server.base.MessageService;
 import io.kaseb.server.exceptions.model.ErrorResponse;
 import io.kaseb.server.exceptions.model.ServiceExceptions;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +17,9 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 @Slf4j
 public class ServiceExceptionHandler {
+    @Autowired
+    private MessageService messageService;
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleExceptions(Exception ex, WebRequest request) {
         if (ex instanceof ServiceException)
@@ -28,7 +33,7 @@ public class ServiceExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> handleInternalException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse(ServiceExceptions.INTERNAL);
+        ErrorResponse errorResponse = new ErrorResponse(ServiceExceptions.INTERNAL, messageService);
         errorResponse.setDebugMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }

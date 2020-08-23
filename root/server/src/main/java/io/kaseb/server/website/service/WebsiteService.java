@@ -2,7 +2,6 @@ package io.kaseb.server.website.service;
 
 import io.kaseb.server.user.exceptions.UnauthorizedAccessException;
 import io.kaseb.server.user.exceptions.WebsiteConfigNotFoundException;
-import io.kaseb.server.user.exceptions.WebsiteExistsException;
 import io.kaseb.server.user.exceptions.WebsiteNotFoundException;
 import io.kaseb.server.user.model.dao.WebsiteRepo;
 import io.kaseb.server.user.model.dto.BaseUserDto;
@@ -153,11 +152,8 @@ public class WebsiteService {
         return new GetWebsitesResponseDto(websiteDtoList);
     }
 
-    public RegisterWebsiteResponseDto registerWebsite(RegisterWebsiteRequestDto request, UserEntity user)
-            throws WebsiteExistsException {
+    public RegisterWebsiteResponseDto registerWebsite(RegisterWebsiteRequestDto request, UserEntity user) {
         final String url = request.getWebsiteUrl();
-        if (websiteRepo.existsByUrl(url))
-            throw new WebsiteExistsException();
         WebsiteEntity websiteEntity = new WebsiteEntity(user, url, request.getTitle());
         websiteEntity = websiteRepo.save(websiteEntity);
         final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteRepo.save(websiteEntity));
