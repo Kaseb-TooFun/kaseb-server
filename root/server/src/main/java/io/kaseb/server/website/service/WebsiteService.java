@@ -54,6 +54,16 @@ public class WebsiteService {
                 .stream().map(ConfigDto::new).collect(Collectors.toList()));
     }
 
+    public ConfigDto getWebsiteConfig(String websiteId, String configId)
+            throws WebsiteNotFoundException, WebsiteConfigNotFoundException {
+        WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
+        WebsiteConfigEntity websiteConfigEntity = websiteConfigRepo.findById(configId)
+                .orElseThrow(WebsiteConfigNotFoundException::new);
+        if (!Objects.equals(websiteConfigEntity.getWebsite().getId(), websiteEntity.getId()))
+            throw new WebsiteConfigNotFoundException();
+        return new ConfigDto(websiteConfigEntity);
+    }
+
     public WebsiteEntity findById(String websiteId) throws WebsiteNotFoundException {
         logger.info("trying to find website with id : {}", websiteId);
         return websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
@@ -101,13 +111,24 @@ public class WebsiteService {
             return new CreateWebsiteConfigResponseDto();
         final List<ConfigDto> configDtoList = new ArrayList<>(request.getConfigValues().size());
         for (String configValue : request.getConfigValues()) {
-            WebsiteConfigEntity websiteConfigEntity = new WebsiteConfigEntity(websiteEntity, configValue);
+            WebsiteConfigEntity websiteConfigEntity = createWebsiteConfigEntity(websiteEntity, request, configValue);
             websiteConfigEntity = websiteConfigRepo.save(websiteConfigEntity);
             ConfigDto configDto = new ConfigDto(websiteConfigEntity);
             configDtoList.add(configDto);
         }
         return new CreateWebsiteConfigResponseDto(configDtoList);
 
+    }
+
+    private WebsiteConfigEntity createWebsiteConfigEntity(
+            WebsiteEntity websiteEntity, CreateWebsiteConfigRequestDto request, String configValue) {
+        return new WebsiteConfigEntity()
+                .setWebsite(websiteEntity)
+                .setName(request.getName())
+                .setGoalType(request.getGoalType())
+                .setGoalLink(request.getGoalLink())
+                .setGoalSelector(request.getGoalSelector())
+                .setConfigValue(configValue);
     }
 
     public UpdateWebsiteConfigResponseDto updateWebsiteConfig(

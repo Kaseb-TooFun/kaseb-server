@@ -23,11 +23,15 @@ public class WebsiteConfigEntity {
     private WebsiteEntity website;
     @Column(name = "config_value", columnDefinition = "TEXT")
     private String configValue;
+    @Column(name = "name", columnDefinition = "TEXT")
+    private String name;
+    @Column(name = "goal_type", columnDefinition = "TEXT")
+    private String goalType;
+    @Column(name = "goal_selector", columnDefinition = "TEXT")
+    private String goalSelector;
+    @Column(name = "goal_link", columnDefinition = "TEXT")
+    private String goalLink;
 
-    public WebsiteConfigEntity(WebsiteEntity website, String configValue) {
-        this.website = website;
-        this.configValue = configValue;
-    }
 
     @Override
     public boolean equals(Object o) {
