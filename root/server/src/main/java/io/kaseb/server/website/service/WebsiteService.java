@@ -16,10 +16,7 @@ import io.kaseb.server.user.model.entities.UserEntity;
 import io.kaseb.server.website.model.dao.WebsiteConfigRepo;
 import io.kaseb.server.website.model.dto.request.CreateWebsiteConfigRequestDto;
 import io.kaseb.server.website.model.dto.request.UpdateWebsiteConfigRequestDto;
-import io.kaseb.server.website.model.dto.response.CreateWebsiteConfigResponseDto;
-import io.kaseb.server.website.model.dto.response.GetWebsiteConfigsResponseDto;
-import io.kaseb.server.website.model.dto.response.GetWebsiteResponseDto;
-import io.kaseb.server.website.model.dto.response.UpdateWebsiteConfigResponseDto;
+import io.kaseb.server.website.model.dto.response.*;
 import io.kaseb.server.website.model.entities.WebsiteConfigEntity;
 import io.kaseb.server.website.model.entities.WebsiteEntity;
 import lombok.RequiredArgsConstructor;
@@ -54,14 +51,14 @@ public class WebsiteService {
                 .stream().map(ConfigDto::new).collect(Collectors.toList()));
     }
 
-    public ConfigDto getWebsiteConfig(String websiteId, String configId)
+    public GetWebsiteConfigResponseDto getWebsiteConfig(String websiteId, String configId)
             throws WebsiteNotFoundException, WebsiteConfigNotFoundException {
         WebsiteEntity websiteEntity = websiteRepo.findById(websiteId).orElseThrow(WebsiteNotFoundException::new);
         WebsiteConfigEntity websiteConfigEntity = websiteConfigRepo.findById(configId)
                 .orElseThrow(WebsiteConfigNotFoundException::new);
         if (!Objects.equals(websiteConfigEntity.getWebsite().getId(), websiteEntity.getId()))
             throw new WebsiteConfigNotFoundException();
-        return new ConfigDto(websiteConfigEntity);
+        return new GetWebsiteConfigResponseDto(websiteConfigEntity, websiteEntity.getUrl());
     }
 
     public WebsiteEntity findById(String websiteId) throws WebsiteNotFoundException {
@@ -139,9 +136,22 @@ public class WebsiteService {
                 websiteConfigRepo.findById(configId).orElseThrow(WebsiteConfigNotFoundException::new);
         if (!Objects.equals(websiteConfigEntity.getWebsite().getUser(), user))
             throw new UnauthorizedAccessException();
-        websiteConfigEntity.setConfigValue(request.getConfigValue());
+        updateWebsiteConfig(request, websiteConfigEntity);
         websiteConfigEntity = websiteConfigRepo.save(websiteConfigEntity);
         return new UpdateWebsiteConfigResponseDto(websiteConfigEntity);
+    }
+
+    private void updateWebsiteConfig(UpdateWebsiteConfigRequestDto request, WebsiteConfigEntity websiteConfigEntity) {
+        if (null != request.getConfigValue())
+            websiteConfigEntity.setConfigValue(request.getConfigValue());
+        if (null != request.getName())
+            websiteConfigEntity.setName(request.getName());
+        if (null != request.getGoalLink())
+            websiteConfigEntity.setGoalLink(request.getGoalLink());
+        if (null != request.getGoalType())
+            websiteConfigEntity.setGoalType(request.getGoalType());
+        if (null != request.getGoalSelector())
+            websiteConfigEntity.setGoalSelector(request.getGoalSelector());
     }
 
     @Transactional
