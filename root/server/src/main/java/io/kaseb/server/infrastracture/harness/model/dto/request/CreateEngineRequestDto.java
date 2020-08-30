@@ -23,12 +23,12 @@ public class CreateEngineRequestDto {
     }
 
     @Data
-    private class Dataset {
+    private static class Dataset {
         private String ttl = "356 days";
     }
 
     @Data
-    private class SparkConfiguration {
+    private static class SparkConfiguration {
         private String master = "local";
         @JsonProperty("spark.serializer")
         private String sparkSerializer = "org.apache.spark.serializer.KryoSerializer";
@@ -52,26 +52,26 @@ public class CreateEngineRequestDto {
     }
 
     @Data
-    private class Algorithm {
+    private static class Algorithm {
         private List<Indicator> indicators;
 
         public Algorithm() {
             this.indicators = Arrays.asList(
-                    new Indicator("goal"),
-                    new Indicator("banner_show"),
-                    new Indicator("banner_close"),
-                    new Indicator("banner_button_click"),
-                    new Indicator("banner_preview_time"),
-                    new Indicator("animation_run"),
-                    new Indicator("animation_click_item"),
-                    new Indicator("new_user_register"),
-                    new Indicator("session_duration")
+                    new Indicator("GOAL"),
+                    new Indicator("BANNER_SHOW"),
+                    new Indicator("BANNER_CLOSE"),
+                    new Indicator("BANNER_BUTTON_CLICK"),
+                    new Indicator("BANNER_PREVIEW_TIME"),
+                    new Indicator("ANIMATION_RUN"),
+                    new Indicator("ANIMATION_CLICK_ITEM"),
+                    new Indicator("NEW_USER_REGISTER"),
+                    new Indicator("SESSION_DURATION")
             );
         }
 
         @AllArgsConstructor
         @Data
-        private class Indicator {
+        private static class Indicator {
             private String name;
         }
     }
