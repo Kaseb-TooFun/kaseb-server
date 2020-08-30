@@ -1,5 +1,6 @@
 package io.kaseb.server.website.service;
 
+import io.kaseb.server.infrastracture.harness.HarnessService;
 import io.kaseb.server.user.exceptions.UnauthorizedAccessException;
 import io.kaseb.server.user.exceptions.WebsiteConfigNotFoundException;
 import io.kaseb.server.user.exceptions.WebsiteNotFoundException;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +43,8 @@ import java.util.stream.Collectors;
 public class WebsiteService {
     private final WebsiteRepo websiteRepo;
     private final WebsiteConfigRepo websiteConfigRepo;
-
+    private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private final HarnessService harnessService;
 
     public GetWebsiteConfigsResponseDto getWebsiteConfigs(String url, String id) throws WebsiteNotFoundException {
         WebsiteEntity websiteEntity = websiteRepo.findByUrl(url).orElse(null);
@@ -185,9 +189,9 @@ public class WebsiteService {
 
     public RegisterWebsiteResponseDto registerWebsite(RegisterWebsiteRequestDto request, UserEntity user) {
         final String url = request.getWebsiteUrl();
-        WebsiteEntity websiteEntity = new WebsiteEntity(user, url, request.getTitle());
-        websiteEntity = websiteRepo.save(websiteEntity);
-        final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteRepo.save(websiteEntity));
+        final WebsiteEntity websiteEntity = websiteRepo.save(new WebsiteEntity(user, url, request.getTitle()));
+        executorService.submit(() -> harnessService.createEngine(websiteEntity.getId()));
+        final BaseWebsiteDto websiteDto = new BaseWebsiteDto(websiteEntity);
         final BaseUserDto userDto = new BaseUserDto(user);
         return new RegisterWebsiteResponseDto(websiteDto, userDto);
     }

@@ -10,6 +10,7 @@ import io.kaseb.server.user.exceptions.WebsiteNotFoundException;
 import io.kaseb.server.website.service.WebsiteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,7 +31,13 @@ public class ModuleService {
     private static volatile String latestModuleLink;
     private static volatile String latestStyleLink;
     private final ModuleRepo moduleRepo;
-    private final WebsiteService websiteService;
+
+    private WebsiteService websiteService;
+
+    @Autowired
+    public void setWebsiteService(WebsiteService websiteService) {
+        this.websiteService = websiteService;
+    }
 
     private static synchronized void updateLatestModuleLink(String moduleLink, String styleLink) {
         latestModuleLink = moduleLink;

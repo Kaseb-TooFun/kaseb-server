@@ -1,6 +1,8 @@
 server:
   port: 1212
 spring:
+  application:
+    name: kaseb-server
   jpa:
     database: POSTGRESQL
     hibernate:
@@ -36,3 +38,10 @@ logging:
 monitoring:
   user: kaseb
   password: HW9Z954sefKxpWDDtcxEaZF2MEtQAccBW2Sb4B4ng22JThDUs9rSDccyRXP3
+
+services:
+  infrastructure:
+    harness:
+      base-url: "https://harness.kaseb.xyz"
+      username: "kaseb"
+      password: "sWn9nS0hXS1pcnGvkryh"

@@ -29,11 +29,13 @@ public class ServiceExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
+        ex.getErrorResponse().setLocalizedErrorMessage(messageService.getMessage(ex.getExceptionEnumerator().name()));
         return ResponseEntity.status(ex.getResponseStatus()).body(ex.getErrorResponse());
     }
 
     private ResponseEntity<ErrorResponse> handleInternalException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse(ServiceExceptions.INTERNAL, messageService);
+        ErrorResponse errorResponse = new ErrorResponse(ServiceExceptions.INTERNAL);
+        errorResponse.setLocalizedErrorMessage(messageService.getMessage(ServiceExceptions.INTERNAL.name()));
         errorResponse.setDebugMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }

@@ -1,6 +1,5 @@
 package io.kaseb.server.exceptions.model;
 
-import io.kaseb.server.base.MessageService;
 import lombok.Data;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,13 +14,13 @@ import java.io.Serializable;
 public class ErrorResponse implements Serializable {
     private final Integer errorCode;
     private final String errorMessage;
-    private final String localizedErrorMessage;
+    @Setter
+    private String localizedErrorMessage;
     @Setter
     private String debugMessage;
 
-    public ErrorResponse(ServiceExceptions serviceExceptions, MessageService messageService) {
+    public ErrorResponse(ServiceExceptions serviceExceptions) {
         this.errorCode = serviceExceptions.getErrorCode();
         this.errorMessage = serviceExceptions.getErrorMessage();
-        this.localizedErrorMessage = messageService.getMessage(serviceExceptions.name());
     }
 }

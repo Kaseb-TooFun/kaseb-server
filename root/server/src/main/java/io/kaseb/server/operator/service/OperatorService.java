@@ -17,6 +17,7 @@ import io.kaseb.server.user.exceptions.UserNotFoundException;
 import io.kaseb.server.util.HashUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,7 +31,12 @@ import java.util.stream.Collectors;
 public class OperatorService {
     private final OperatorRepo operatorRepo;
     private final MessageSource messageSource;
-    private final ModuleService moduleService;
+    private ModuleService moduleService;
+
+    @Autowired
+    public void setModuleService(ModuleService moduleService) {
+        this.moduleService = moduleService;
+    }
 
     public OperatorEntity signup(String username, String hashedPassword) throws DuplicateUsernameException {
         logger.info("trying to signup operator with username : {}", username);

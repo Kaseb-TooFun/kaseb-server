@@ -19,7 +19,6 @@ public class BaseInfoService {
     private final MessageService messageService;
 
     public List<ErrorResponse> getErrors() {
-        return Arrays.stream(ServiceExceptions.values())
-                .map(i -> new ErrorResponse(i, messageService)).collect(Collectors.toList());
+        return Arrays.stream(ServiceExceptions.values()).map(ErrorResponse::new).collect(Collectors.toList());
     }
 }
