@@ -14,8 +14,8 @@ variables:
 stages:
   - test
   - build
-  - tag
   - package
+  - tag
   - deploy
 
 maven-test:
