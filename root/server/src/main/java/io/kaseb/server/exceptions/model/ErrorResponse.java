@@ -12,15 +12,15 @@ import java.io.Serializable;
 @ToString
 @Data
 public class ErrorResponse implements Serializable {
-    private final Integer errorCode;
-    private final String errorMessage;
-    @Setter
-    private String localizedErrorMessage;
-    @Setter
-    private String debugMessage;
+	private final Integer errorCode;
+	private final String errorMessage;
+	@Setter
+	private String localizedErrorMessage;
+	@Setter
+	private String debugMessage;
 
-    public ErrorResponse(ServiceExceptions serviceExceptions) {
-        this.errorCode = serviceExceptions.getErrorCode();
-        this.errorMessage = serviceExceptions.getErrorMessage();
-    }
+	public ErrorResponse(ServiceExceptions serviceExceptions) {
+		this.errorCode = serviceExceptions.getErrorCode();
+		this.errorMessage = serviceExceptions.getErrorMessage();
+	}
 }

@@ -8,7 +8,7 @@ import io.kaseb.server.exceptions.model.ServiceExceptions;
  */
 public class DuplicateUsernameException extends ServiceException {
 
-    public DuplicateUsernameException() {
-        super(ServiceExceptions.DUPLICATE_USERNAME);
-    }
+	public DuplicateUsernameException() {
+		super(ServiceExceptions.DUPLICATE_USERNAME);
+	}
 }

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/verify")
 @RequiredArgsConstructor
 public class VerifyController {
-    private final VerifyService verifyService;
+	private final VerifyService verifyService;
 
-    @GetMapping
-    @IgnoreAuthentication
-    public ResponseEntity<VerifyResponseDto> verify() {
-        return ResponseEntity.ok(verifyService.verify());
-    }
+	@GetMapping
+	@IgnoreAuthentication
+	public ResponseEntity<VerifyResponseDto> verify() {
+		return ResponseEntity.ok(verifyService.verify());
+	}
 }

@@ -12,24 +12,24 @@ import java.util.Objects;
 @ToString
 @Getter
 public class VerifyResponseDto {
-    private final String date;
-    private final boolean up;
+	private final String date;
+	private final boolean up;
 
-    public VerifyResponseDto(boolean up) {
-        this.date = LocalDate.now().toString();
-        this.up = up;
-    }
+	public VerifyResponseDto(boolean up) {
+		this.date = LocalDate.now().toString();
+		this.up = up;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof VerifyResponseDto)) return false;
-        VerifyResponseDto that = (VerifyResponseDto) o;
-        return up == that.up;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof VerifyResponseDto)) return false;
+		VerifyResponseDto that = (VerifyResponseDto) o;
+		return up == that.up;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(up);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(up);
+	}
 }

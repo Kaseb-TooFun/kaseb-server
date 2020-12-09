@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface WebsiteConfigRepo extends JpaRepository<WebsiteConfigEntity, String> {
-    List<WebsiteConfigEntity> findAllByWebsite(WebsiteEntity websiteEntity);
+	List<WebsiteConfigEntity> findAllByWebsite(WebsiteEntity websiteEntity);
 }

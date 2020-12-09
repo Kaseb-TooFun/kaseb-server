@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 public class WebsiteNotFoundException extends ServiceException {
-    public WebsiteNotFoundException() {
-        super(HttpStatus.NOT_FOUND, ServiceExceptions.WEBSITE_NOT_FOUND);
-    }
+	public WebsiteNotFoundException() {
+		super(HttpStatus.NOT_FOUND, ServiceExceptions.WEBSITE_NOT_FOUND);
+	}
 }

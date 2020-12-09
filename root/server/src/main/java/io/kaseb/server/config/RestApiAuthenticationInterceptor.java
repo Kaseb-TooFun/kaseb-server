@@ -26,36 +26,36 @@ import java.lang.reflect.Method;
 @Slf4j
 @RequiredArgsConstructor
 public class RestApiAuthenticationInterceptor implements HandlerInterceptor {
-    private final AuthenticateService authenticateService;
-    private final RequestContext requestContext;
+	private final AuthenticateService authenticateService;
+	private final RequestContext requestContext;
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        requestContext.setClientIp(request.getRemoteAddr());
-        if (handler instanceof HandlerMethod) {
-            Method method = ((HandlerMethod) handler).getMethod();
-            if (!method.isAnnotationPresent(IgnoreAuthentication.class)) {
-                AuthenticationRequired annotation = method.getAnnotation(AuthenticationRequired.class);
-                authenticate(request, annotation == null ? null : annotation.role());
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		requestContext.setClientIp(request.getRemoteAddr());
+		if (handler instanceof HandlerMethod) {
+			Method method = ((HandlerMethod) handler).getMethod();
+			if (!method.isAnnotationPresent(IgnoreAuthentication.class)) {
+				AuthenticationRequired annotation = method.getAnnotation(AuthenticationRequired.class);
+				authenticate(request, annotation == null ? null : annotation.role());
+			}
+		}
+		return true;
+	}
 
-    private void authenticate(HttpServletRequest request, Role role)
-            throws AuthenticationException, AdminAuthenticationException, OperatorAuthenticationException {
-        final SessionEntity sessionEntity = authenticateService.authenticate(request);
-        if (Role.ADMIN.equals(role)) {
-            if (sessionEntity.getUser() == null)
-                throw new AdminAuthenticationException();
-            requestContext.setUser(sessionEntity.getUser());
-        } else if (Role.OPERATOR.equals(role)) {
-            if (sessionEntity.getOperator() == null)
-                throw new OperatorAuthenticationException();
-            requestContext.setOperator(sessionEntity.getOperator());
-        } else {
-            requestContext.setOperator(sessionEntity.getOperator());
-            requestContext.setUser(sessionEntity.getUser());
-        }
-    }
+	private void authenticate(HttpServletRequest request, Role role)
+			throws AuthenticationException, AdminAuthenticationException, OperatorAuthenticationException {
+		final SessionEntity sessionEntity = authenticateService.authenticate(request);
+		if (Role.ADMIN.equals(role)) {
+			if (sessionEntity.getUser() == null)
+				throw new AdminAuthenticationException();
+			requestContext.setUser(sessionEntity.getUser());
+		} else if (Role.OPERATOR.equals(role)) {
+			if (sessionEntity.getOperator() == null)
+				throw new OperatorAuthenticationException();
+			requestContext.setOperator(sessionEntity.getOperator());
+		} else {
+			requestContext.setOperator(sessionEntity.getOperator());
+			requestContext.setUser(sessionEntity.getUser());
+		}
+	}
 }

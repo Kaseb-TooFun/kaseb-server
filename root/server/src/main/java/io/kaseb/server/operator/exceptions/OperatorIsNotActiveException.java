@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 public class OperatorIsNotActiveException extends ServiceException {
-    public OperatorIsNotActiveException() {
-        super(HttpStatus.FORBIDDEN, ServiceExceptions.OPERATOR_NOT_ACTIVATED);
-    }
+	public OperatorIsNotActiveException() {
+		super(HttpStatus.FORBIDDEN, ServiceExceptions.OPERATOR_NOT_ACTIVATED);
+	}
 }

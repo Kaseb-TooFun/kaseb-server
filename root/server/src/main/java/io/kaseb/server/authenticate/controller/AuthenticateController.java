@@ -22,17 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/v1/authenticate")
 @RequiredArgsConstructor
 public class AuthenticateController {
-    private final AuthenticateService authenticateService;
+	private final AuthenticateService authenticateService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto request, HttpServletResponse response
-    ) throws ServiceException {
-        return ResponseEntity.ok(authenticateService.signup(request, response));
-    }
+	@PostMapping("/signup")
+	public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto request, HttpServletResponse response
+	) throws ServiceException {
+		return ResponseEntity.ok(authenticateService.signup(request, response));
+	}
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> authenticate(
-            @RequestBody LoginRequestDto request, HttpServletResponse response) throws ServiceException {
-        return ResponseEntity.ok(authenticateService.login(request, response));
-    }
+	@PostMapping("/login")
+	public ResponseEntity<LoginResponseDto> authenticate(
+			@RequestBody LoginRequestDto request, HttpServletResponse response) throws ServiceException {
+		return ResponseEntity.ok(authenticateService.login(request, response));
+	}
 }

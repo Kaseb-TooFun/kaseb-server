@@ -11,5 +11,5 @@ import java.util.Optional;
  */
 @Repository
 public interface ModuleRepo extends JpaRepository<ModuleEntity, String> {
-    Optional<ModuleEntity> findFirstByOrderByCreationDateDesc();
+	Optional<ModuleEntity> findFirstByOrderByCreationDateDesc();
 }

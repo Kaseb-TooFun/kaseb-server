@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class VerifyService {
-    public VerifyResponseDto verify() {
-        return new VerifyResponseDto(true);
-    }
+	public VerifyResponseDto verify() {
+		return new VerifyResponseDto(true);
+	}
 }

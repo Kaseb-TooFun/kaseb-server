@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class UpdateWebsiteConfigResponseDto {
-    public UpdateWebsiteConfigResponseDto(WebsiteConfigEntity configEntity) {
-        this.config = new ConfigDto(configEntity);
-    }
+	private ConfigDto config;
 
-    private ConfigDto config;
+	public UpdateWebsiteConfigResponseDto(WebsiteConfigEntity configEntity) {
+		this.config = new ConfigDto(configEntity);
+	}
 }

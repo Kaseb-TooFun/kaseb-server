@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface OperatorRepo extends JpaRepository<OperatorEntity, String> {
-    Optional<OperatorEntity> findByUsername(String username);
+	Optional<OperatorEntity> findByUsername(String username);
 }

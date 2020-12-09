@@ -9,5 +9,5 @@ import java.util.List;
  */
 @Data
 public class RegisterWebsiteConfigRequestDto {
-    private List<String> configs;
+	private List<String> configs;
 }

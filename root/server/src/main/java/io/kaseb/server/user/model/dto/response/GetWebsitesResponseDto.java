@@ -12,5 +12,5 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class GetWebsitesResponseDto {
-    private List<BaseWebsiteDto> websites;
+	private List<BaseWebsiteDto> websites;
 }

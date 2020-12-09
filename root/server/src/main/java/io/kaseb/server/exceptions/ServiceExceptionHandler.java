@@ -17,26 +17,26 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 @Slf4j
 public class ServiceExceptionHandler {
-    @Autowired
-    private MessageService messageService;
+	@Autowired
+	private MessageService messageService;
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleExceptions(Exception ex, WebRequest request) {
-        if (ex instanceof ServiceException)
-            return handleServiceException((ServiceException) ex);
-        logger.error("internal server error on request :{}", request.getContextPath(), ex);
-        return handleInternalException(ex);
-    }
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponse> handleExceptions(Exception ex, WebRequest request) {
+		if (ex instanceof ServiceException)
+			return handleServiceException((ServiceException) ex);
+		logger.error("internal server error on request :{}", request.getContextPath(), ex);
+		return handleInternalException(ex);
+	}
 
-    private ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
-        ex.getErrorResponse().setLocalizedErrorMessage(messageService.getMessage(ex.getExceptionEnumerator().name()));
-        return ResponseEntity.status(ex.getResponseStatus()).body(ex.getErrorResponse());
-    }
+	private ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
+		ex.getErrorResponse().setLocalizedErrorMessage(messageService.getMessage(ex.getExceptionEnumerator().name()));
+		return ResponseEntity.status(ex.getResponseStatus()).body(ex.getErrorResponse());
+	}
 
-    private ResponseEntity<ErrorResponse> handleInternalException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse(ServiceExceptions.INTERNAL);
-        errorResponse.setLocalizedErrorMessage(messageService.getMessage(ServiceExceptions.INTERNAL.name()));
-        errorResponse.setDebugMessage(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-    }
+	private ResponseEntity<ErrorResponse> handleInternalException(Exception ex) {
+		ErrorResponse errorResponse = new ErrorResponse(ServiceExceptions.INTERNAL);
+		errorResponse.setLocalizedErrorMessage(messageService.getMessage(ServiceExceptions.INTERNAL.name()));
+		errorResponse.setDebugMessage(ex.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+	}
 }

@@ -9,10 +9,10 @@ import lombok.Data;
  */
 @Data
 public class GetWebsiteConfigResponseDto extends ConfigDto {
-    private String websiteUrl;
+	private String websiteUrl;
 
-    public GetWebsiteConfigResponseDto(WebsiteConfigEntity entity, String websiteUrl) {
-        super(entity);
-        this.websiteUrl = websiteUrl;
-    }
+	public GetWebsiteConfigResponseDto(WebsiteConfigEntity entity, String websiteUrl) {
+		super(entity);
+		this.websiteUrl = websiteUrl;
+	}
 }

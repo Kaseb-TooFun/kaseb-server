@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 
 @Data
 public class WebsiteDto extends BaseWebsiteDto {
-    private List<ConfigDto> configs;
+	private List<ConfigDto> configs;
 
-    public WebsiteDto(WebsiteEntity websiteEntity, List<WebsiteConfigEntity> configEntities) {
-        super(websiteEntity);
-        if (!CollectionUtils.isEmpty(configEntities))
-            this.configs = configEntities.stream().map(ConfigDto::new).collect(Collectors.toList());
-        else
-            this.configs = Collections.emptyList();
-    }
+	public WebsiteDto(WebsiteEntity websiteEntity, List<WebsiteConfigEntity> configEntities) {
+		super(websiteEntity);
+		if (!CollectionUtils.isEmpty(configEntities))
+			this.configs = configEntities.stream().map(ConfigDto::new).collect(Collectors.toList());
+		else
+			this.configs = Collections.emptyList();
+	}
 }

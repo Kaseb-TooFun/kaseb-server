@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users/websites")
 @RequiredArgsConstructor
 public class UserWebsiteController {
-    private final UserService userService;
-    private final RequestContext requestContext;
+	private final UserService userService;
+	private final RequestContext requestContext;
 
-    @PostMapping
-    public ResponseEntity<RegisterWebsiteResponseDto> registerWebsite(@RequestBody RegisterWebsiteRequestDto request)
-            throws ServiceException {
-        return ResponseEntity.ok(userService.registerWebsite(request, requestContext.getUser()));
-    }
+	@PostMapping
+	public ResponseEntity<RegisterWebsiteResponseDto> registerWebsite(@RequestBody RegisterWebsiteRequestDto request)
+			throws ServiceException {
+		return ResponseEntity.ok(userService.registerWebsite(request, requestContext.getUser()));
+	}
 
-    @GetMapping
-    public ResponseEntity<GetWebsitesResponseDto> getWebsites() throws ServiceException {
-        return ResponseEntity.ok(userService.getWebsite(requestContext.getUser()));
-    }
+	@GetMapping
+	public ResponseEntity<GetWebsitesResponseDto> getWebsites() throws ServiceException {
+		return ResponseEntity.ok(userService.getWebsite(requestContext.getUser()));
+	}
 
 
 }

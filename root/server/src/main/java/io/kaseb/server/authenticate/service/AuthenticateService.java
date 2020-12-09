@@ -33,129 +33,129 @@ import static io.kaseb.server.util.HashUtils.hash;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticateService {
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String AUTHORIZATION_HEADER_BASE = "Bearer ";
-    private final UserService userService;
-    private final OperatorService operatorService;
-    private final SessionRepo sessionRepo;
+	private static final String AUTHORIZATION_HEADER = "Authorization";
+	private static final String AUTHORIZATION_HEADER_BASE = "Bearer ";
+	private final UserService userService;
+	private final OperatorService operatorService;
+	private final SessionRepo sessionRepo;
 
-    public LoginResponseDto login(LoginRequestDto request, HttpServletResponse response) throws ServiceException {
-        final String hashedPassword = hash(request.getPassword());
-        final Pair<SessionEntity, String> sessionPair;
-        final BaseUserDto userDto;
-        if (request.isOperator()) {
-            final OperatorEntity operatorEntity = operatorService.login(request.getUsername(), hashedPassword);
-            sessionPair = createSession(operatorEntity);
-            userDto = new BaseUserDto(operatorEntity);
-        } else {
-            final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
-            sessionPair = createSession(userEntity);
-            userDto = new BaseUserDto(userEntity);
-        }
-        setAuthenticationInfoInResponse(response, sessionPair.getSecond());
-        return new LoginResponseDto(userDto, sessionPair.getSecond());
-    }
+	public LoginResponseDto login(LoginRequestDto request, HttpServletResponse response) throws ServiceException {
+		final String hashedPassword = hash(request.getPassword());
+		final Pair<SessionEntity, String> sessionPair;
+		final BaseUserDto userDto;
+		if (request.isOperator()) {
+			final OperatorEntity operatorEntity = operatorService.login(request.getUsername(), hashedPassword);
+			sessionPair = createSession(operatorEntity);
+			userDto = new BaseUserDto(operatorEntity);
+		} else {
+			final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
+			sessionPair = createSession(userEntity);
+			userDto = new BaseUserDto(userEntity);
+		}
+		setAuthenticationInfoInResponse(response, sessionPair.getSecond());
+		return new LoginResponseDto(userDto, sessionPair.getSecond());
+	}
 
-    private void setAuthenticationInfoInResponse(HttpServletResponse response, String plainToken) {
-        response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + plainToken);
-        response.addCookie(createCookie(plainToken));
-    }
+	private void setAuthenticationInfoInResponse(HttpServletResponse response, String plainToken) {
+		response.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_BASE + plainToken);
+		response.addCookie(createCookie(plainToken));
+	}
 
-    private Cookie createCookie(String plainToken) {
-        Cookie cookie = new Cookie(AUTHORIZATION_HEADER, plainToken);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(Integer.MAX_VALUE);
-        return cookie;
-    }
+	private Cookie createCookie(String plainToken) {
+		Cookie cookie = new Cookie(AUTHORIZATION_HEADER, plainToken);
+		cookie.setPath("/");
+		cookie.setHttpOnly(true);
+		cookie.setMaxAge(Integer.MAX_VALUE);
+		return cookie;
+	}
 
-    private Pair<SessionEntity, String> createSession(UserEntity userEntity) {
-        final String plainToken = createRandomToken();
-        SessionEntity sessionEntity = new SessionEntity(hash(plainToken), userEntity);
-        return Pair.of(sessionRepo.save(sessionEntity), plainToken);
-    }
+	private Pair<SessionEntity, String> createSession(UserEntity userEntity) {
+		final String plainToken = createRandomToken();
+		SessionEntity sessionEntity = new SessionEntity(hash(plainToken), userEntity);
+		return Pair.of(sessionRepo.save(sessionEntity), plainToken);
+	}
 
-    private Pair<SessionEntity, String> createSession(OperatorEntity operatorEntity) {
-        final String plainToken = createRandomToken();
-        SessionEntity sessionEntity = new SessionEntity(hash(plainToken), operatorEntity);
-        return Pair.of(sessionRepo.save(sessionEntity), plainToken);
-    }
+	private Pair<SessionEntity, String> createSession(OperatorEntity operatorEntity) {
+		final String plainToken = createRandomToken();
+		SessionEntity sessionEntity = new SessionEntity(hash(plainToken), operatorEntity);
+		return Pair.of(sessionRepo.save(sessionEntity), plainToken);
+	}
 
-    private String createRandomToken() {
-        final byte[] randomBytes = new byte[100];
-        new Random(System.currentTimeMillis()).nextBytes(randomBytes);
-        return Base64Utils.encodeToString(randomBytes);
-    }
+	private String createRandomToken() {
+		final byte[] randomBytes = new byte[100];
+		new Random(System.currentTimeMillis()).nextBytes(randomBytes);
+		return Base64Utils.encodeToString(randomBytes);
+	}
 
-    public SignupResponseDto signup(SignupRequestDto request, HttpServletResponse response) throws ServiceException {
-        final String hashedPassword = hash(request.getPassword());
-        signup(request, hashedPassword);
-        final Pair<?, String> sessionPair;
-        final BaseUserDto userDto;
-        if (request.isOperator()) {
-            final OperatorEntity operatorEntity = operatorService.login(request.getUsername(), hashedPassword);
-            sessionPair = createSession(operatorEntity);
-            userDto = new BaseUserDto(operatorEntity);
-        } else {
-            final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
-            sessionPair = createSession(userEntity);
-            userDto = new BaseUserDto(userEntity);
+	public SignupResponseDto signup(SignupRequestDto request, HttpServletResponse response) throws ServiceException {
+		final String hashedPassword = hash(request.getPassword());
+		signup(request, hashedPassword);
+		final Pair<?, String> sessionPair;
+		final BaseUserDto userDto;
+		if (request.isOperator()) {
+			final OperatorEntity operatorEntity = operatorService.login(request.getUsername(), hashedPassword);
+			sessionPair = createSession(operatorEntity);
+			userDto = new BaseUserDto(operatorEntity);
+		} else {
+			final UserEntity userEntity = userService.login(request.getUsername(), hashedPassword);
+			sessionPair = createSession(userEntity);
+			userDto = new BaseUserDto(userEntity);
 
-        }
-        setAuthenticationInfoInResponse(response, sessionPair.getSecond());
-        return new SignupResponseDto(userDto, sessionPair.getSecond());
-    }
+		}
+		setAuthenticationInfoInResponse(response, sessionPair.getSecond());
+		return new SignupResponseDto(userDto, sessionPair.getSecond());
+	}
 
-    private void signup(SignupRequestDto request, String hashedPassword) throws DuplicateUsernameException {
-        if (request.isOperator()) {
-            OperatorEntity operatorEntity = operatorService.signup(request.getUsername(), hashedPassword);
-            logger.info("operator with id :{} signed up successfully", operatorEntity.getId());
-        } else {
-            UserEntity userEntity = userService.signup(request.getUsername(), hashedPassword);
-            logger.info("user with id :{} signed up successfully", userEntity.getId());
-        }
-    }
+	private void signup(SignupRequestDto request, String hashedPassword) throws DuplicateUsernameException {
+		if (request.isOperator()) {
+			OperatorEntity operatorEntity = operatorService.signup(request.getUsername(), hashedPassword);
+			logger.info("operator with id :{} signed up successfully", operatorEntity.getId());
+		} else {
+			UserEntity userEntity = userService.signup(request.getUsername(), hashedPassword);
+			logger.info("user with id :{} signed up successfully", userEntity.getId());
+		}
+	}
 
-    public SessionEntity authenticate(HttpServletRequest request) throws AuthenticationException {
-        final String plainToken = extractPlainToken(request);
-        return authenticate(plainToken);
-    }
+	public SessionEntity authenticate(HttpServletRequest request) throws AuthenticationException {
+		final String plainToken = extractPlainToken(request);
+		return authenticate(plainToken);
+	}
 
-    private String extractPlainToken(HttpServletRequest request) throws AuthenticationException {
-        logger.info("trying to extract plain token from request");
-        String bearerTokenFromHeader = extractTokenFromHeader(request);
-        if (bearerTokenFromHeader != null && !StringUtils.isEmpty(bearerTokenFromHeader))
-            return bearerTokenFromHeader
-                    .replace(AUTHORIZATION_HEADER_BASE, "")
-                    .replace(AUTHORIZATION_HEADER_BASE.toLowerCase(), "");
-        logger.info("request does not have authorization header");
-        String bearerTokenFromCookie = extractTokenFromCookie(request);
-        if (bearerTokenFromCookie != null && !StringUtils.isEmpty(bearerTokenFromCookie))
-            return bearerTokenFromCookie;
-        logger.info("request does not have authorization cookie");
-        throw new AuthenticationException();
-    }
+	private String extractPlainToken(HttpServletRequest request) throws AuthenticationException {
+		logger.info("trying to extract plain token from request");
+		String bearerTokenFromHeader = extractTokenFromHeader(request);
+		if (bearerTokenFromHeader != null && !StringUtils.isEmpty(bearerTokenFromHeader))
+			return bearerTokenFromHeader
+					.replace(AUTHORIZATION_HEADER_BASE, "")
+					.replace(AUTHORIZATION_HEADER_BASE.toLowerCase(), "");
+		logger.info("request does not have authorization header");
+		String bearerTokenFromCookie = extractTokenFromCookie(request);
+		if (bearerTokenFromCookie != null && !StringUtils.isEmpty(bearerTokenFromCookie))
+			return bearerTokenFromCookie;
+		logger.info("request does not have authorization cookie");
+		throw new AuthenticationException();
+	}
 
-    private String extractTokenFromCookie(HttpServletRequest request) {
-        if (request == null || request.getCookies() == null)
-            return null;
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
-                return cookie.getValue();
-            }
-        }
-        return null;
-    }
+	private String extractTokenFromCookie(HttpServletRequest request) {
+		if (request == null || request.getCookies() == null)
+			return null;
+		for (Cookie cookie : request.getCookies()) {
+			if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+				return cookie.getValue();
+			}
+		}
+		return null;
+	}
 
-    private String extractTokenFromHeader(HttpServletRequest request) {
-        return request == null ? null : request.getHeader(AUTHORIZATION_HEADER);
-    }
+	private String extractTokenFromHeader(HttpServletRequest request) {
+		return request == null ? null : request.getHeader(AUTHORIZATION_HEADER);
+	}
 
-    private SessionEntity authenticate(String plainToken) throws AuthenticationException {
-        final SessionEntity sessionEntity = sessionRepo.findByToken(hash(plainToken))
-                .orElseThrow(AuthenticationException::new);
-        sessionEntity.setLastActivityDate(new Date());
-        sessionRepo.saveAndFlush(sessionEntity);
-        return sessionEntity;
-    }
+	private SessionEntity authenticate(String plainToken) throws AuthenticationException {
+		final SessionEntity sessionEntity = sessionRepo.findByToken(hash(plainToken))
+				.orElseThrow(AuthenticationException::new);
+		sessionEntity.setLastActivityDate(new Date());
+		sessionRepo.saveAndFlush(sessionEntity);
+		return sessionEntity;
+	}
 }

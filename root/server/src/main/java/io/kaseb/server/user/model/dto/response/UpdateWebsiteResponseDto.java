@@ -10,5 +10,5 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class UpdateWebsiteResponseDto {
-    private final BaseWebsiteDto website;
+	private final BaseWebsiteDto website;
 }

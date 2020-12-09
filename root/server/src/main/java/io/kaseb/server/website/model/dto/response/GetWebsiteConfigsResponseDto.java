@@ -14,5 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetWebsiteConfigsResponseDto {
-    private List<ConfigDto> configs;
+	private List<ConfigDto> configs;
 }

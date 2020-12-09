@@ -7,7 +7,7 @@ import io.kaseb.server.exceptions.model.ServiceExceptions;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 public class WebsiteExistsException extends ServiceException {
-    public WebsiteExistsException() {
-        super(ServiceExceptions.WEBSITE_EXISTS);
-    }
+	public WebsiteExistsException() {
+		super(ServiceExceptions.WEBSITE_EXISTS);
+	}
 }

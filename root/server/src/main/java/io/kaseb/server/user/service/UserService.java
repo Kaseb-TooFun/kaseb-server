@@ -22,35 +22,35 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final UserRepo userRepo;
-    private final WebsiteRepo websiteRepo;
-    private final WebsiteService websiteService;
+	private final UserRepo userRepo;
+	private final WebsiteRepo websiteRepo;
+	private final WebsiteService websiteService;
 
-    public UserEntity signup(String username, String hashedPassword) throws DuplicateUsernameException {
-        logger.info("trying to signup with username : {}", username);
-        Optional<UserEntity> optionalUserEntity = userRepo.findByUsername(username);
-        if (optionalUserEntity.isPresent()) {
-            throw new DuplicateUsernameException();
-        }
-        UserEntity userEntity = new UserEntity(username, hashedPassword);
-        return userRepo.save(userEntity);
-    }
+	public UserEntity signup(String username, String hashedPassword) throws DuplicateUsernameException {
+		logger.info("trying to signup with username : {}", username);
+		Optional<UserEntity> optionalUserEntity = userRepo.findByUsername(username);
+		if (optionalUserEntity.isPresent()) {
+			throw new DuplicateUsernameException();
+		}
+		UserEntity userEntity = new UserEntity(username, hashedPassword);
+		return userRepo.save(userEntity);
+	}
 
-    public UserEntity login(String username, String hashedPassword) throws ServiceException {
-        logger.info("trying to login with username : {}", username);
-        Optional<UserEntity> optionalUserEntity = userRepo.findByUsername(username);
-        UserEntity userEntity = optionalUserEntity.orElseThrow(UserNotFoundException::new);
-        if (!Objects.equals(userEntity.getHashedPassword(), hashedPassword))
-            throw new IncorrectPasswordException();
-        return userEntity;
-    }
+	public UserEntity login(String username, String hashedPassword) throws ServiceException {
+		logger.info("trying to login with username : {}", username);
+		Optional<UserEntity> optionalUserEntity = userRepo.findByUsername(username);
+		UserEntity userEntity = optionalUserEntity.orElseThrow(UserNotFoundException::new);
+		if (!Objects.equals(userEntity.getHashedPassword(), hashedPassword))
+			throw new IncorrectPasswordException();
+		return userEntity;
+	}
 
-    public RegisterWebsiteResponseDto registerWebsite(RegisterWebsiteRequestDto request, UserEntity user) {
-        return websiteService.registerWebsite(request, user);
-    }
+	public RegisterWebsiteResponseDto registerWebsite(RegisterWebsiteRequestDto request, UserEntity user) {
+		return websiteService.registerWebsite(request, user);
+	}
 
-    public GetWebsitesResponseDto getWebsite(UserEntity user) throws UserNotFoundException {
-        user = userRepo.findById(user.getId()).orElseThrow(UserNotFoundException::new);
-        return websiteService.getWebsites(user);
-    }
+	public GetWebsitesResponseDto getWebsite(UserEntity user) throws UserNotFoundException {
+		user = userRepo.findById(user.getId()).orElseThrow(UserNotFoundException::new);
+		return websiteService.getWebsites(user);
+	}
 }

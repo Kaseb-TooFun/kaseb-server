@@ -8,17 +8,17 @@ import lombok.Data;
  */
 @Data
 public class BaseModuleDto {
-    private String id;
-    private String link;
-    private String style;
-    private Long creationDateTimestamp;
+	private String id;
+	private String link;
+	private String style;
+	private Long creationDateTimestamp;
 
-    public BaseModuleDto(ModuleEntity moduleEntity) {
-        if (moduleEntity == null)
-            return;
-        this.id = moduleEntity.getId();
-        this.link = moduleEntity.getLink();
-        this.style = moduleEntity.getStyle();
-        this.creationDateTimestamp = moduleEntity.getCreationDate().getTime();
-    }
+	public BaseModuleDto(ModuleEntity moduleEntity) {
+		if (moduleEntity == null)
+			return;
+		this.id = moduleEntity.getId();
+		this.link = moduleEntity.getLink();
+		this.style = moduleEntity.getStyle();
+		this.creationDateTimestamp = moduleEntity.getCreationDate().getTime();
+	}
 }

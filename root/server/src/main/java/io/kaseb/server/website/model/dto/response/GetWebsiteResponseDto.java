@@ -9,9 +9,9 @@ import java.util.List;
 
 @Data
 public class GetWebsiteResponseDto {
-    public GetWebsiteResponseDto(WebsiteEntity websiteEntity, List<WebsiteConfigEntity> configs) {
-        this.website = new WebsiteDto(websiteEntity, configs);
-    }
+	private WebsiteDto website;
 
-    private WebsiteDto website;
+	public GetWebsiteResponseDto(WebsiteEntity websiteEntity, List<WebsiteConfigEntity> configs) {
+		this.website = new WebsiteDto(websiteEntity, configs);
+	}
 }

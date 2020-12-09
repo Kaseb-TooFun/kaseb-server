@@ -21,32 +21,32 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequiredArgsConstructor
 public class OperatorController {
-    private final RequestContext requestContext;
-    private final OperatorService operatorService;
+	private final RequestContext requestContext;
+	private final OperatorService operatorService;
 
-    @GetMapping
-    @ApiOperation("Get Operators List")
-    @AuthenticationRequired(role = Role.OPERATOR)
-    public ResponseEntity<List<OperatorDto>> getOperatorsList() {
-        return ok(operatorService.getOperatorsList());
-    }
+	@GetMapping
+	@ApiOperation("Get Operators List")
+	@AuthenticationRequired(role = Role.OPERATOR)
+	public ResponseEntity<List<OperatorDto>> getOperatorsList() {
+		return ok(operatorService.getOperatorsList());
+	}
 
-    @PutMapping("/{operatorId}/activate")
-    @ApiOperation("Active/deActive Operator")
-    @AuthenticationRequired(role = Role.OPERATOR)
-    public ResponseEntity<Void> activateOperator(
-            @PathVariable("operatorId") String operatorId,
-            @RequestParam(name = "activate", required = false, defaultValue = "true") boolean activate)
-            throws ServiceException {
-        return ok(operatorService.activateOperator(requestContext.getOperator(), operatorId, activate));
-    }
+	@PutMapping("/{operatorId}/activate")
+	@ApiOperation("Active/deActive Operator")
+	@AuthenticationRequired(role = Role.OPERATOR)
+	public ResponseEntity<Void> activateOperator(
+			@PathVariable("operatorId") String operatorId,
+			@RequestParam(name = "activate", required = false, defaultValue = "true") boolean activate)
+			throws ServiceException {
+		return ok(operatorService.activateOperator(requestContext.getOperator(), operatorId, activate));
+	}
 
-    @PostMapping("/modules")
-    @ApiOperation("Set module")
-    @AuthenticationRequired(role = Role.OPERATOR)
-    public ResponseEntity<BaseModuleDto> createModule(
-            @RequestBody CreateModuleRequestDto requestDto)
-            throws ServiceException {
-        return ok(operatorService.createModule(requestContext.getOperator(), requestDto));
-    }
+	@PostMapping("/modules")
+	@ApiOperation("Set module")
+	@AuthenticationRequired(role = Role.OPERATOR)
+	public ResponseEntity<BaseModuleDto> createModule(
+			@RequestBody CreateModuleRequestDto requestDto)
+			throws ServiceException {
+		return ok(operatorService.createModule(requestContext.getOperator(), requestDto));
+	}
 }

@@ -7,7 +7,7 @@ import io.kaseb.server.exceptions.model.ServiceExceptions;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 public class IncorrectPasswordException extends ServiceException {
-    public IncorrectPasswordException() {
-        super(ServiceExceptions.INCORRECT_PASSWORD);
-    }
+	public IncorrectPasswordException() {
+		super(ServiceExceptions.INCORRECT_PASSWORD);
+	}
 }

@@ -11,6 +11,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class RegisterWebsiteResponseDto {
-    private final BaseWebsiteDto website;
-    private final BaseUserDto user;
+	private final BaseWebsiteDto website;
+	private final BaseUserDto user;
 }

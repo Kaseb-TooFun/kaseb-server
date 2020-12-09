@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 public class UserNotFoundException extends ServiceException {
-    public UserNotFoundException() {
-        super(HttpStatus.NOT_FOUND, ServiceExceptions.USER_NOT_FOUND);
-    }
+	public UserNotFoundException() {
+		super(HttpStatus.NOT_FOUND, ServiceExceptions.USER_NOT_FOUND);
+	}
 }

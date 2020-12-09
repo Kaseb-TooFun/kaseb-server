@@ -15,21 +15,21 @@ import java.util.List;
  */
 @Configuration
 public class HarnessApiConfig {
-    @Value("${services.infrastructure.harness.username}")
-    private String username;
-    @Value("${services.infrastructure.harness.password}")
-    private String password;
+	@Value("${services.infrastructure.harness.username}")
+	private String username;
+	@Value("${services.infrastructure.harness.password}")
+	private String password;
 
-    public BasicAuthenticationInterceptor basicAuthRequestInterceptor() {
-        return new BasicAuthenticationInterceptor(username, password);
-    }
+	public BasicAuthenticationInterceptor basicAuthRequestInterceptor() {
+		return new BasicAuthenticationInterceptor(username, password);
+	}
 
-    @Bean
-    public HarnessRestTemplate harnessRestTemplate() {
-        HarnessRestTemplate harnessRestTemplate = new HarnessRestTemplate();
-        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-        interceptors.add(basicAuthRequestInterceptor());
-        harnessRestTemplate.setInterceptors(interceptors);
-        return harnessRestTemplate;
-    }
+	@Bean
+	public HarnessRestTemplate harnessRestTemplate() {
+		HarnessRestTemplate harnessRestTemplate = new HarnessRestTemplate();
+		List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+		interceptors.add(basicAuthRequestInterceptor());
+		harnessRestTemplate.setInterceptors(interceptors);
+		return harnessRestTemplate;
+	}
 }

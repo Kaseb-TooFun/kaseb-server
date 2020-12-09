@@ -17,23 +17,23 @@ import java.util.UUID;
 @Entity
 @Table(name = "modules")
 public class ModuleEntity {
-    @Id
-    @Column(name = "id", unique = true, nullable = false)
-    private String id = UUID.randomUUID().toString();
-    @Column(name = "link", columnDefinition = "varchar(500)")
-    private String link;
-    @Column(name = "style", columnDefinition = "varchar(500)")
-    private String style;
-    @Column(name = "creation_date")
-    @CreationTimestamp
-    private Date creationDate;
-    @ManyToOne
-    @JoinColumn(name = "operator_id")
-    private OperatorEntity operator;
+	@Id
+	@Column(name = "id", unique = true, nullable = false)
+	private String id = UUID.randomUUID().toString();
+	@Column(name = "link", columnDefinition = "varchar(500)")
+	private String link;
+	@Column(name = "style", columnDefinition = "varchar(500)")
+	private String style;
+	@Column(name = "creation_date")
+	@CreationTimestamp
+	private Date creationDate;
+	@ManyToOne
+	@JoinColumn(name = "operator_id")
+	private OperatorEntity operator;
 
-    public ModuleEntity(String link, String style, OperatorEntity operatorEntity) {
-        this.link = link;
-        this.style = style;
-        this.operator = operatorEntity;
-    }
+	public ModuleEntity(String link, String style, OperatorEntity operatorEntity) {
+		this.link = link;
+		this.style = style;
+		this.operator = operatorEntity;
+	}
 }

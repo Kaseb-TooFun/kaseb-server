@@ -19,32 +19,32 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class SessionEntity {
-    @Id
-    @Column(name = "id", nullable = false, unique = true)
-    private final String id = UUID.randomUUID().toString();
-    @Column(name = "token")
-    private String token;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-    @ManyToOne
-    @JoinColumn(name = "operator_id")
-    private OperatorEntity operator;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "creation_date")
-    @CreationTimestamp
-    private Date creationDate;
-    @Setter
-    @Column(name = "last_activity_date")
-    private Date lastActivityDate;
+	@Id
+	@Column(name = "id", nullable = false, unique = true)
+	private final String id = UUID.randomUUID().toString();
+	@Column(name = "token")
+	private String token;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
+	@ManyToOne
+	@JoinColumn(name = "operator_id")
+	private OperatorEntity operator;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "creation_date")
+	@CreationTimestamp
+	private Date creationDate;
+	@Setter
+	@Column(name = "last_activity_date")
+	private Date lastActivityDate;
 
-    public SessionEntity(String token, UserEntity user) {
-        this.token = token;
-        this.user = user;
-    }
+	public SessionEntity(String token, UserEntity user) {
+		this.token = token;
+		this.user = user;
+	}
 
-    public SessionEntity(String token, OperatorEntity operator) {
-        this.token = token;
-        this.operator = operator;
-    }
+	public SessionEntity(String token, OperatorEntity operator) {
+		this.token = token;
+		this.operator = operator;
+	}
 }

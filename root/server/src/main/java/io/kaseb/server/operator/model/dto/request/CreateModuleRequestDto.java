@@ -7,6 +7,6 @@ import lombok.Data;
  */
 @Data
 public class CreateModuleRequestDto {
-    private String moduleLink;
-    private String styleLink;
+	private String moduleLink;
+	private String styleLink;
 }

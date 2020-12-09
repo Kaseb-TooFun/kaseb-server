@@ -12,18 +12,18 @@ import java.util.Locale;
 @Service
 @RequiredArgsConstructor
 public class MessageService {
-    private final MessageSource messageSource;
+	private final MessageSource messageSource;
 
-    public String getMessage(String code) {
-        return getMessage(code, new Object[]{});
-    }
+	public String getMessage(String code) {
+		return getMessage(code, new Object[]{});
+	}
 
-    public String getMessage(String code, Object[] args) {
-        Locale farsiLocale = new Locale("fa", "IR");
-        return getMessage(code, args, farsiLocale);
-    }
+	public String getMessage(String code, Object[] args) {
+		Locale farsiLocale = new Locale("fa", "IR");
+		return getMessage(code, args, farsiLocale);
+	}
 
-    public String getMessage(String code, Object[] args, Locale locale) {
-        return messageSource.getMessage(code, args, code, locale);
-    }
+	public String getMessage(String code, Object[] args, Locale locale) {
+		return messageSource.getMessage(code, args, code, locale);
+	}
 }

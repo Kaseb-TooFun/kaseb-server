@@ -8,13 +8,13 @@ import lombok.Data;
  */
 @Data
 public class BaseWebsiteDto {
-    private String id;
-    private String title;
-    private String url;
+	private String id;
+	private String title;
+	private String url;
 
-    public BaseWebsiteDto(WebsiteEntity websiteEntity) {
-        this.id = websiteEntity.getId();
-        this.title = websiteEntity.getTitle();
-        this.url = websiteEntity.getUrl();
-    }
+	public BaseWebsiteDto(WebsiteEntity websiteEntity) {
+		this.id = websiteEntity.getId();
+		this.title = websiteEntity.getTitle();
+		this.url = websiteEntity.getUrl();
+	}
 }

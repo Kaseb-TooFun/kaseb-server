@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 public class ForbiddenException extends ServiceException {
-    public ForbiddenException() {
-        super(HttpStatus.FORBIDDEN, ServiceExceptions.FORBIDDEN);
-    }
+	public ForbiddenException() {
+		super(HttpStatus.FORBIDDEN, ServiceExceptions.FORBIDDEN);
+	}
 }

@@ -9,9 +9,9 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequestMapping("/")
 public class DocumentController {
-    @GetMapping
-    @IgnoreAuthentication
-    public RedirectView redirectToSwagger() {
-        return new RedirectView("/swagger-ui.html");
-    }
+	@GetMapping
+	@IgnoreAuthentication
+	public RedirectView redirectToSwagger() {
+		return new RedirectView("/swagger-ui.html");
+	}
 }

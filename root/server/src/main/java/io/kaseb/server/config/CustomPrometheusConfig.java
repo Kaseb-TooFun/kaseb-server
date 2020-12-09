@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class CustomPrometheusConfig {
-    @Bean
-    @Primary
-    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
-        return registry -> registry.config().commonTags("application", "kaseb");
-    }
+	@Bean
+	@Primary
+	public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+		return registry -> registry.config().commonTags("application", "kaseb");
+	}
 }

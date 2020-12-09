@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BaseInfoService {
-    private final MessageService messageService;
+	private final MessageService messageService;
 
-    public List<ErrorResponse> getErrors() {
-        return Arrays.stream(ServiceExceptions.values()).map(ErrorResponse::new).collect(Collectors.toList());
-    }
+	public List<ErrorResponse> getErrors() {
+		return Arrays.stream(ServiceExceptions.values()).map(ErrorResponse::new).collect(Collectors.toList());
+	}
 }

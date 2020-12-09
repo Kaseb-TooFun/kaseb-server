@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @author Seyyed Mahdiyar Zerehpoush
  */
 public class UnauthorizedAccessException extends ServiceException {
-    public UnauthorizedAccessException() {
-        super(HttpStatus.UNAUTHORIZED, ServiceExceptions.UNAUTHORIZED);
-    }
+	public UnauthorizedAccessException() {
+		super(HttpStatus.UNAUTHORIZED, ServiceExceptions.UNAUTHORIZED);
+	}
 }

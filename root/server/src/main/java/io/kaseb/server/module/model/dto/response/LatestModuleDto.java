@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LatestModuleDto {
-    private String url;
-    private String style;
+	private String url;
+	private String style;
 }

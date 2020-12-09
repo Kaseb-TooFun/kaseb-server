@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Loader implements ApplicationListener<ContextRefreshedEvent> {
-    private OperatorService operatorService;
+	private OperatorService operatorService;
 
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        operatorService.initializeSysadmin();
-    }
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+		operatorService.initializeSysadmin();
+	}
 
-    @Autowired
-    public void setOperatorService(OperatorService operatorService) {
-        this.operatorService = operatorService;
-    }
+	@Autowired
+	public void setOperatorService(OperatorService operatorService) {
+		this.operatorService = operatorService;
+	}
 }

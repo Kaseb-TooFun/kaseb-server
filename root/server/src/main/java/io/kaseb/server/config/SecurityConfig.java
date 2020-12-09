@@ -20,43 +20,43 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${monitoring.user}")
-    private String monitoringUser;
-    @Value("${monitoring.password}")
-    private String monitoringPassword;
+	@Value("${monitoring.user}")
+	private String monitoringUser;
+	@Value("${monitoring.password}")
+	private String monitoringPassword;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().disable()
-                .csrf().disable().authorizeRequests()
-                .antMatchers("/monitoring/**").authenticated()
-                .and().httpBasic();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.cors().disable()
+				.csrf().disable().authorizeRequests()
+				.antMatchers("/monitoring/**").authenticated()
+				.and().httpBasic();
+	}
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser(monitoringUser)
-                .password(passwordEncoder().encode(monitoringPassword))
-                .roles("ACTUATOR", "ACTRADMIN");
-    }
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication()
+				.withUser(monitoringUser)
+				.password(passwordEncoder().encode(monitoringPassword))
+				.roles("ACTUATOR", "ACTRADMIN");
+	}
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", " Authorization", "Content-Type"));
-        configuration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", " Authorization"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Collections.singletonList("*"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", " Authorization", "Content-Type"));
+		configuration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", " Authorization"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 
 
 }

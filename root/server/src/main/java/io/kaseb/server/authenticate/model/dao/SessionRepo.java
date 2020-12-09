@@ -11,5 +11,5 @@ import java.util.Optional;
  */
 @Repository
 public interface SessionRepo extends JpaRepository<SessionEntity, String> {
-    Optional<SessionEntity> findByToken(String token);
+	Optional<SessionEntity> findByToken(String token);
 }

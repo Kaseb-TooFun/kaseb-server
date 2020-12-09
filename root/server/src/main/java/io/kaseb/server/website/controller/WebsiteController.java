@@ -23,50 +23,50 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class WebsiteController {
-    private final WebsiteService websiteService;
-    private final RequestContext requestContext;
+	private final WebsiteService websiteService;
+	private final RequestContext requestContext;
 
-    @ApiOperation("Create Website")
-    @PostMapping
-    public ResponseEntity<RegisterWebsiteResponseDto> createWebsite(@RequestBody RegisterWebsiteRequestDto request) {
-        return ResponseEntity.ok(websiteService.registerWebsite(request, requestContext.getUser()));
-    }
+	@ApiOperation("Create Website")
+	@PostMapping
+	public ResponseEntity<RegisterWebsiteResponseDto> createWebsite(@RequestBody RegisterWebsiteRequestDto request) {
+		return ResponseEntity.ok(websiteService.registerWebsite(request, requestContext.getUser()));
+	}
 
-    @ApiOperation("Get Websites")
-    @GetMapping
-    public ResponseEntity<GetWebsitesResponseDto> getWebsites() {
-        return ResponseEntity.ok(websiteService.getWebsites(requestContext.getUser()));
-    }
+	@ApiOperation("Get Websites")
+	@GetMapping
+	public ResponseEntity<GetWebsitesResponseDto> getWebsites() {
+		return ResponseEntity.ok(websiteService.getWebsites(requestContext.getUser()));
+	}
 
-    @ApiOperation("Get Website By Id")
-    @GetMapping("/{websiteId}")
-    public ResponseEntity<GetWebsiteResponseDto> getWebsites(
-            @PathVariable("websiteId") String websiteId) throws ServiceException {
-        return ResponseEntity.ok(websiteService.getWebsite(websiteId));
-    }
+	@ApiOperation("Get Website By Id")
+	@GetMapping("/{websiteId}")
+	public ResponseEntity<GetWebsiteResponseDto> getWebsites(
+			@PathVariable("websiteId") String websiteId) throws ServiceException {
+		return ResponseEntity.ok(websiteService.getWebsite(websiteId));
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UpdateWebsiteResponseDto> updateWebsite(
-            @RequestBody UpdateWebsiteRequestDto request,
-            @PathVariable("id") String id)
-            throws ServiceException {
-        return ResponseEntity.ok(websiteService.updateWebsite(request, id, requestContext.getUser()));
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<UpdateWebsiteResponseDto> updateWebsite(
+			@RequestBody UpdateWebsiteRequestDto request,
+			@PathVariable("id") String id)
+			throws ServiceException {
+		return ResponseEntity.ok(websiteService.updateWebsite(request, id, requestContext.getUser()));
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWebsite(
-            @PathVariable("id") String id)
-            throws ServiceException {
-        return ResponseEntity.ok(websiteService.deleteWebsite(id, requestContext.getUser()));
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteWebsite(
+			@PathVariable("id") String id)
+			throws ServiceException {
+		return ResponseEntity.ok(websiteService.deleteWebsite(id, requestContext.getUser()));
+	}
 
-    @ApiOperation("Get Website Configs")
-    @GetMapping("/configs")
-    @IgnoreAuthentication
-    public ResponseEntity<GetWebsiteConfigsResponseDto> getWebsiteConfig(
-            @RequestParam("websiteUrl") String websiteUrl) throws ServiceException {
-        return ResponseEntity.ok(websiteService.getWebsiteConfigs(websiteUrl, null));
-    }
+	@ApiOperation("Get Website Configs")
+	@GetMapping("/configs")
+	@IgnoreAuthentication
+	public ResponseEntity<GetWebsiteConfigsResponseDto> getWebsiteConfig(
+			@RequestParam("websiteUrl") String websiteUrl) throws ServiceException {
+		return ResponseEntity.ok(websiteService.getWebsiteConfigs(websiteUrl, null));
+	}
 
 
 }

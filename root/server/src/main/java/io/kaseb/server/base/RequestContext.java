@@ -17,8 +17,8 @@ import java.util.UUID;
 @Data
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class RequestContext {
-    private String requestId = UUID.randomUUID().toString();
-    private UserEntity user;
-    private OperatorEntity operator;
-    private String clientIp;
+	private String requestId = UUID.randomUUID().toString();
+	private UserEntity user;
+	private OperatorEntity operator;
+	private String clientIp;
 }

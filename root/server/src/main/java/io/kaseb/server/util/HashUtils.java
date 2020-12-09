@@ -9,19 +9,19 @@ import java.security.NoSuchAlgorithmException;
 
 @Slf4j
 public class HashUtils {
-    private HashUtils() {
-    }
+	private HashUtils() {
+	}
 
-    public static String hash(String value) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(value.getBytes(StandardCharsets.UTF_8));
-            byte[] md5Bytes = md.digest();
-            return Base64Utils.encodeToString(md5Bytes);
-        } catch (NoSuchAlgorithmException e) {
-            logger.error("no such algorithm {} base64", "SHA-256", e);
-        }
-        return "";
-    }
+	public static String hash(String value) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(value.getBytes(StandardCharsets.UTF_8));
+			byte[] md5Bytes = md.digest();
+			return Base64Utils.encodeToString(md5Bytes);
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("no such algorithm {} base64", "SHA-256", e);
+		}
+		return "";
+	}
 
 }

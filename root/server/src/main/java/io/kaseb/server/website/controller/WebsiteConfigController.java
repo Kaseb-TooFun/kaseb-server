@@ -5,10 +5,7 @@ import io.kaseb.server.base.RequestContext;
 import io.kaseb.server.exceptions.ServiceException;
 import io.kaseb.server.website.model.dto.request.CreateWebsiteConfigRequestDto;
 import io.kaseb.server.website.model.dto.request.UpdateWebsiteConfigRequestDto;
-import io.kaseb.server.website.model.dto.response.CreateWebsiteConfigResponseDto;
-import io.kaseb.server.website.model.dto.response.GetWebsiteConfigResponseDto;
-import io.kaseb.server.website.model.dto.response.GetWebsiteConfigsResponseDto;
-import io.kaseb.server.website.model.dto.response.UpdateWebsiteConfigResponseDto;
+import io.kaseb.server.website.model.dto.response.*;
 import io.kaseb.server.website.service.WebsiteService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,51 +19,56 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class WebsiteConfigController {
-    private final WebsiteService websiteService;
-    private final RequestContext requestContext;
+	private final WebsiteService websiteService;
+	private final RequestContext requestContext;
 
-    @ApiOperation("Get Website Configs")
-    @GetMapping
-    @IgnoreAuthentication
-    public ResponseEntity<GetWebsiteConfigsResponseDto> getWebsiteConfigs(
-            @PathVariable("websiteId") String websiteId) throws ServiceException {
-        return ResponseEntity.ok(websiteService.getWebsiteConfigs(null, websiteId));
-    }
+	@ApiOperation("Get Website Configs")
+	@GetMapping
+	@IgnoreAuthentication
+	public ResponseEntity<GetWebsiteConfigsResponseDto> getWebsiteConfigs(
+			@PathVariable("websiteId") String websiteId) throws ServiceException {
+		return ResponseEntity.ok(websiteService.getWebsiteConfigs(null, websiteId));
+	}
 
-    @ApiOperation("Get Website Config by Id")
-    @GetMapping("/{configId}")
-    @IgnoreAuthentication
-    public ResponseEntity<GetWebsiteConfigResponseDto> getWebsiteConfig(
-            @PathVariable("websiteId") String websiteId,
-            @PathVariable("configId") String configId) throws ServiceException {
-        return ResponseEntity.ok(websiteService.getWebsiteConfig(websiteId, configId));
-    }
+	@ApiOperation("Get Website Config by Id")
+	@GetMapping("/{configId}")
+	@IgnoreAuthentication
+	public ResponseEntity<GetWebsiteConfigResponseDto> getWebsiteConfig(
+			@PathVariable("websiteId") String websiteId,
+			@PathVariable("configId") String configId) throws ServiceException {
+		return ResponseEntity.ok(websiteService.getWebsiteConfig(websiteId, configId));
+	}
 
-    @ApiOperation("Create Website Config")
-    @PostMapping
-    public ResponseEntity<CreateWebsiteConfigResponseDto> createWebsiteConfig(
-            @RequestBody CreateWebsiteConfigRequestDto request,
-            @PathVariable("websiteId") String websiteId)
-            throws ServiceException {
-        return ResponseEntity.ok(websiteService.createWebsiteConfig(websiteId, request, requestContext.getUser()));
-    }
+	@ApiOperation("Create Website Config")
+	@PostMapping
+	public ResponseEntity<CreateWebsiteConfigResponseDto> createWebsiteConfig(
+			@RequestBody CreateWebsiteConfigRequestDto request,
+			@PathVariable("websiteId") String websiteId)
+			throws ServiceException {
+		return ResponseEntity.ok(websiteService.createWebsiteConfig(websiteId, request, requestContext.getUser()));
+	}
 
-    @ApiOperation("Update Website Config")
-    @PutMapping("/{configId}")
-    public ResponseEntity<UpdateWebsiteConfigResponseDto> updateWebsiteConfig(
-            @RequestBody UpdateWebsiteConfigRequestDto request,
-            @PathVariable("websiteId") String websiteId,
-            @PathVariable("configId") String configId)
-            throws ServiceException {
-        return ResponseEntity.ok(websiteService.updateWebsiteConfig(request, websiteId, configId,
-                requestContext.getUser()));
-    }
+	@ApiOperation("Update Website Config")
+	@PutMapping("/{configId}")
+	public ResponseEntity<UpdateWebsiteConfigResponseDto> updateWebsiteConfig(
+			@RequestBody UpdateWebsiteConfigRequestDto request,
+			@PathVariable("websiteId") String websiteId,
+			@PathVariable("configId") String configId)
+			throws ServiceException {
+		return ResponseEntity.ok(websiteService.updateWebsiteConfig(request, websiteId, configId,
+				requestContext.getUser()));
+	}
 
-    @DeleteMapping("/{configId}")
-    public ResponseEntity<Void> deleteWebsiteConfig(
-            @PathVariable("websiteId") String websiteId,
-            @PathVariable("configId") String configId)
-            throws ServiceException {
-        return ResponseEntity.ok(websiteService.deleteWebsiteConfig(websiteId, configId, requestContext.getUser()));
-    }
+	@DeleteMapping("/{configId}")
+	public ResponseEntity<Void> deleteWebsiteConfig(
+			@PathVariable("websiteId") String websiteId,
+			@PathVariable("configId") String configId)
+			throws ServiceException {
+		return ResponseEntity.ok(websiteService.deleteWebsiteConfig(websiteId, configId, requestContext.getUser()));
+	}
+
+	@PutMapping("/batch/harness")
+	public ResponseEntity<BatchUpdateHarnessConfig> batchUpdateHarnessConfig()throws ServiceException {
+		return ResponseEntity.ok(websiteService.batchUpdateHarnessConfig());
+	}
 }
